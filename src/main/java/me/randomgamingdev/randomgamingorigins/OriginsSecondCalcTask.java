@@ -2,7 +2,10 @@ package me.randomgamingdev.randomgamingorigins;
 
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
+import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.block.Biome;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -24,6 +27,21 @@ public class OriginsSecondCalcTask extends BukkitRunnable {
         playerData.abilityTimer--;
     }
 
+    public void RainDamage(Player player, double damage) {
+        World world = player.getWorld();
+        if (!world.hasStorm() && !world.isThundering())
+            return;
+        Location location = player.getLocation();
+        double temperature = location.getBlock().getTemperature();
+        if (temperature < 0.15 || temperature > 0.95)
+            return;
+        if (player.getInventory().getHelmet() != null)
+            return;
+        int blockLocation = world.getHighestBlockYAt(location);
+        if (blockLocation <= player.getLocation().getY())
+            player.damage(damage);
+    }
+
     @Override
     public void run() {
         for (Player player : plugin.getServer().getOnlinePlayers()) {
@@ -36,6 +54,8 @@ public class OriginsSecondCalcTask extends BukkitRunnable {
                         player.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(1);
                     if (player.isInWater())
                         player.damage(2);
+
+                    RainDamage(player, 1);
                     break;
                 case Merling:
                     if (player.getRemainingAir() <= 0)
@@ -48,6 +68,7 @@ public class OriginsSecondCalcTask extends BukkitRunnable {
                     TickDown(player, playerData);
                     if (player.isInWater())
                         player.damage(1);
+                    RainDamage(player, 1);
                     break;
                 case Elytrian:
                     TickDown(player, playerData);
