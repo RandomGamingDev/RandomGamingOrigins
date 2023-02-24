@@ -385,13 +385,14 @@ public class Origins implements Listener {
                     String.valueOf(playerData.origin.ordinal())));
 
             if (playerData.inventory == null) {
-                saveData.append("null");
-                break;
+                saveData.append("null\n");
+                continue;
             }
 
             for (ItemStack item : playerData.inventory.getContents())
                 if (item != null)
                     saveData.append('\n' + RandomGamingOrigins.gson.toJson(item.serialize()));
+            saveData.append("\n");
         }
 
         File saveFile = new File(saveFileName);
