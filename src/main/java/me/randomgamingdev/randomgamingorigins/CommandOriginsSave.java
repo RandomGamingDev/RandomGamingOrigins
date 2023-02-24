@@ -5,7 +5,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class CommandLoad implements CommandExecutor {
+public class CommandOriginsSave implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         String saveFileName;
@@ -15,19 +15,19 @@ public class CommandLoad implements CommandExecutor {
         else
             saveFileName = args[0];
 
-        boolean successfulLoad = Origins.Load(Origins.saveFileName);
+        boolean successfulSave = Origins.Save(Origins.saveFileName);
 
         if (!(sender instanceof Player))
             return true;
 
-        String loadState;
+        String saveState;
 
-        if (successfulLoad)
-            loadState = String.format("RandomGamingOrigins: Loaded successfully from %s!", saveFileName);
+        if (successfulSave)
+            saveState = String.format("RandomGamingOrigins: Saved successfully to %s!", saveFileName);
         else
-            loadState = String.format("RandomGamingOrigins: Something went wrong while loading from %s!", saveFileName);
+            saveState = String.format("RandomGamingOrigins: Something went wrong while saving to %s!", saveFileName);
 
-        ((Player)sender).sendMessage(loadState);
+        ((Player)sender).sendMessage(saveState);
         return true;
     }
 }

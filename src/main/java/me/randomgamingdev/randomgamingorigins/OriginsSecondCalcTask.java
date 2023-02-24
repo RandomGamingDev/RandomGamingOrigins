@@ -30,7 +30,7 @@ public class OriginsSecondCalcTask extends BukkitRunnable {
             switch (playerData.origin) {
                 case Blazeborn:
                     if (player.getFireTicks() > 0)
-                        player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 20, 1, true, false));
+                        player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 30, 1, true, false));
                     if (player.isInWater())
                         player.damage(1);
                     break;
@@ -49,7 +49,7 @@ public class OriginsSecondCalcTask extends BukkitRunnable {
                 case Elytrian:
                     TickDown(player, playerData);
                     if (player.isGliding())
-                        player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 20, 1, true, false));
+                        player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 30, 1, true, false));
                     break;
             }
         }

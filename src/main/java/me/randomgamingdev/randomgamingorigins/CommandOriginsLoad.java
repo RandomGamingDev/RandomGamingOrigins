@@ -1,13 +1,11 @@
 package me.randomgamingdev.randomgamingorigins;
 
-import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
-public class CommandSave implements CommandExecutor {
+public class CommandOriginsLoad implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         String saveFileName;
@@ -17,19 +15,19 @@ public class CommandSave implements CommandExecutor {
         else
             saveFileName = args[0];
 
-        boolean successfulSave = Origins.Save(Origins.saveFileName);
+        boolean successfulLoad = Origins.Load(Origins.saveFileName);
 
         if (!(sender instanceof Player))
             return true;
 
-        String saveState;
+        String loadState;
 
-        if (successfulSave)
-            saveState = String.format("RandomGamingOrigins: Saved successfully to %s!", saveFileName);
+        if (successfulLoad)
+            loadState = String.format("RandomGamingOrigins: Loaded successfully from %s!", saveFileName);
         else
-            saveState = String.format("RandomGamingOrigins: Something went wrong while saving to %s!", saveFileName);
+            loadState = String.format("RandomGamingOrigins: Something went wrong while loading from %s!", saveFileName);
 
-        ((Player)sender).sendMessage(saveState);
+        ((Player)sender).sendMessage(loadState);
         return true;
     }
 }

@@ -18,9 +18,9 @@ commands:
   getorigin:
     usage: /<command> [<player>]
     permission: randomgamingorigins.getorigincommand
-  save:
+  originssave:
     usage: /<command> [<string>]
     permission: randomgamingorigins.save
-  load:
+  originsload:
     usage: /<command> [<string>]
     permission: randomgamingorigins.load
