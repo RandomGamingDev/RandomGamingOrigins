@@ -1,0 +1,26 @@
+name: RandomGamingOrigins
+version: '${project.version}'
+main: me.randomgamingdev.randomgamingorigins.RandomGamingOrigins
+api-version: 1.19
+authors: [ RandomGamingDev ]
+description: An origins plugin created by me, RandomGamingDev!
+
+commands:
+  ping:
+    usage: /<command>
+    permission: randomgamingorigins.ping
+  originsgui:
+    usage: /<command> [<player>]
+    permission: randomgamingorigins.originsguicommand
+  origins:
+    usage: /<command> [<player>]
+    permission: randomgamingorigins.originscommand
+  getorigin:
+    usage: /<command> [<player>]
+    permission: randomgamingorigins.getorigincommand
+  save:
+    usage: /<command> [<string>]
+    permission: randomgamingorigins.save
+  load:
+    usage: /<command> [<string>]
+    permission: randomgamingorigins.load
