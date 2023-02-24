@@ -28,14 +28,14 @@ public class OriginsSecondCalcTask extends BukkitRunnable {
     }
 
     public void RainDamage(Player player, double damage) {
+        if (player.getInventory().getHelmet() != null)
+            return;
         World world = player.getWorld();
         if (!world.hasStorm() && !world.isThundering())
             return;
         Location location = player.getLocation();
         double temperature = location.getBlock().getTemperature();
         if (temperature < 0.15 || temperature > 0.95)
-            return;
-        if (player.getInventory().getHelmet() != null)
             return;
         int blockLocation = world.getHighestBlockYAt(location);
         if (blockLocation <= player.getLocation().getY())
