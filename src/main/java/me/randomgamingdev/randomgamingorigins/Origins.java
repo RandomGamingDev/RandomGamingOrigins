@@ -1,7 +1,6 @@
 package me.randomgamingdev.randomgamingorigins;
 
 import com.google.common.reflect.TypeToken;
-import com.google.gson.Gson;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -11,21 +10,17 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EnderPearl;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.*;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.bukkit.util.Vector;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -76,7 +71,7 @@ enum Origin {
                     "§7- Acrobatics: you take no fall damage",
                     "§7- Strong Ankles: You have jump boost 1",
                     "§7- Nine Lives: You have 9 hearts total"),
-            new Object[]{}, 9 * 2),
+            new Object[]{ new Pair(PotionEffectType.JUMP, 0) }, 9 * 2),
     Enderian("Enderian",
             createGuiItem(Material.ENDER_PEARL, true,
                     "§r§fEnderian",
@@ -100,7 +95,7 @@ enum Origin {
                     "§7even through death",
                     "§7- Hard Shell: You have natural armor",
                     "§7- Unwieldy: You cannot use shields"),
-            new Object[]{ new Pair(PotionEffectType.HUNGER, 0) }, 10 * 2),
+            new Object[]{ new Pair(PotionEffectType.HUNGER, 0), new Pair(PotionEffectType.DAMAGE_RESISTANCE, 0) }, 10 * 2),
     Fox("Fox",
             createGuiItem(Material.SWEET_BERRIES, true,
                     "§r§fFox",
@@ -116,7 +111,7 @@ enum Origin {
                     "§7- Fast Metabolism: You loose hunger faster",
                     "§7- Unwieldy: You cannot use shields",
                     "§7- Smaller Heart: You have 6 max hearts"),
-            new Object[]{ new Pair(PotionEffectType.HUNGER, 0), new Pair(PotionEffectType.NIGHT_VISION, 0) }, 6 * 2),
+            new Object[]{ new Pair(PotionEffectType.HUNGER, 0), new Pair(PotionEffectType.NIGHT_VISION, 0), new Pair(PotionEffectType.JUMP, 0), new Pair(PotionEffectType.SPEED, 1) }, 6 * 2),
     Merling("Merling",
             createGuiItem(Material.COD, true,
                     "§r§fMerling",
@@ -124,7 +119,7 @@ enum Origin {
                     "§7- Adaptation: You can break blocks under water as if you were on land",
                     "§7- Fins: You have permanent dolphins grace",
                     "§7- Gills: You cannot breath on land"),
-            new Object[]{}, 10 * 2);
+            new Object[]{ new Pair(PotionEffectType.DOLPHINS_GRACE, 0) }, 10 * 2);
 
     final public String name;
     final public ItemStack item;

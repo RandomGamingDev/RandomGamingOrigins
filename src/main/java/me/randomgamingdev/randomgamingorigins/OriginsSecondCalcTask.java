@@ -56,10 +56,6 @@ public class OriginsSecondCalcTask extends BukkitRunnable {
                     if (player.hasPotionEffect(PotionEffectType.INVISIBILITY))
                         player.addPotionEffect(new PotionEffect(PotionEffectType.HUNGER, 20, 0, true, false));
                     break;
-                case Feline:
-                    if (player.isSprinting())
-                        player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 30, 0, true, false));
-                    break;
             }
         }
     }
