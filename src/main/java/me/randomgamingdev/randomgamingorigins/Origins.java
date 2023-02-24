@@ -13,6 +13,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemFlag;
@@ -137,6 +138,7 @@ public class Origins implements Listener {
     public static RandomGamingOrigins plugin;
     public static HashMap<UUID, PlayerData> playersData = new HashMap<UUID, PlayerData>();
     public static final String saveFileName = "./Origins.data";
+
     public static final Material[] meats = {
             Material.BEEF, Material.COOKED_BEEF,
             Material.PORKCHOP, Material.COOKED_PORKCHOP,
@@ -148,6 +150,14 @@ public class Origins implements Listener {
             Material.TROPICAL_FISH,
             Material.PUFFERFISH,
             Material.ROTTEN_FLESH
+    };
+
+    public static final Material[] goldenTools = {
+            Material.GOLDEN_SWORD,
+            Material.GOLDEN_AXE,
+            Material.GOLDEN_PICKAXE,
+            Material.GOLDEN_SHOVEL,
+            Material.GOLDEN_HOE
     };
 
     public static void ApplyOriginMaxHealth(Player player, Origin origin) {
@@ -265,16 +275,36 @@ public class Origins implements Listener {
     }
 
     @EventHandler
+    public void onPlayerItemDamageEvent(PlayerItemDamageEvent event) {
+        Player player = event.getPlayer();
+        Material item = event.getItem().getType();
+        if (item == null)
+            return;
+        Origin origin = playersData.get(player.getUniqueId()).origin;
+        switch (origin) {
+            case Piglin:
+                for (Material tool : goldenTools)
+                    if (item == tool && RandomGamingOrigins.rand.nextBoolean())
+                        event.setCancelled(true);
+                break;
+        }
+    }
+
+    @EventHandler
     public void onPlayerInteractEvent(PlayerInteractEvent event) {
         Player player = event.getPlayer();
-        Action action = event.getAction();
-        if (action != Action.RIGHT_CLICK_AIR && action != Action.RIGHT_CLICK_BLOCK)
-            return;
         ItemStack item = event.getItem();
         if (item == null)
             return;
         Material itemType = item.getType();
         Origin origin = playersData.get(player.getUniqueId()).origin;
+        Action action = event.getAction();
+        if (action == Action.LEFT_CLICK_AIR || action == Action.LEFT_CLICK_BLOCK) {
+            switch (origin) {
+
+            }
+            return;
+        }
         switch (origin) {
             case Shulk:
             case Fox:

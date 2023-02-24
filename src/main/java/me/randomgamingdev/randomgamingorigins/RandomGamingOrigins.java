@@ -4,8 +4,11 @@ import com.google.gson.Gson;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.Random;
+
 public final class RandomGamingOrigins extends JavaPlugin {
     public static Gson gson = new Gson();
+    public static Random rand = new Random();
 
     @Override
     public void onEnable() {
