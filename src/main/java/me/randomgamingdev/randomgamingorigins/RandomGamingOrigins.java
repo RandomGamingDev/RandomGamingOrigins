@@ -10,6 +10,7 @@ public final class RandomGamingOrigins extends JavaPlugin {
     @Override
     public void onEnable() {
         System.out.println("RandomGamingOrigins is starting up!");
+        Origins.plugin = this;
         this.getCommand("ping").setExecutor(new CommandPing());
         this.getServer().getPluginManager().registerEvents(new OriginsGui(this), this);
         this.getServer().getPluginManager().registerEvents(new Origins(), this);

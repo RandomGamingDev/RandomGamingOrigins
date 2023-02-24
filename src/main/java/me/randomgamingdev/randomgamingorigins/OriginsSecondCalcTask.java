@@ -32,7 +32,7 @@ public class OriginsSecondCalcTask extends BukkitRunnable {
                     if (player.getFireTicks() > 0)
                         player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 30, 1, true, false));
                     if (player.isInWater())
-                        player.damage(1);
+                        player.damage(2);
                     break;
                 case Merling:
                     if (player.getRemainingAir() <= 0)
@@ -48,8 +48,14 @@ public class OriginsSecondCalcTask extends BukkitRunnable {
                     break;
                 case Elytrian:
                     TickDown(player, playerData);
-                    if (player.isGliding())
-                        player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 30, 1, true, false));
+                    break;
+                case Phantom:
+                    if (player.hasPotionEffect(PotionEffectType.INVISIBILITY))
+                        player.addPotionEffect(new PotionEffect(PotionEffectType.HUNGER, 20, 1, true, false));
+                    break;
+                case Feline:
+                    if (player.isSprinting())
+                        player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 30, 1, true, false));
                     break;
             }
         }

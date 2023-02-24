@@ -21,6 +21,7 @@ public class OriginsTickCalcTask extends BukkitRunnable {
                     if (player.isInWater()) {
                         player.setRemainingAir(player.getRemainingAir() + 5);
                         player.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, 2, 15, true, false));
+                        player.addPotionEffect(new PotionEffect(PotionEffectType.DOLPHINS_GRACE, 2, 1, true, false));
                         break;
                     }
                     int remainingAir = player.getRemainingAir();

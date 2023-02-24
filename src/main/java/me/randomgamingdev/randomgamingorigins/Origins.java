@@ -142,6 +142,7 @@ enum Origin {
 }
 
 public class Origins implements Listener {
+    public static RandomGamingOrigins plugin;
     public static HashMap<UUID, PlayerData> playersData = new HashMap<UUID, PlayerData>();
     public static final String saveFileName = "./Origins.data";
     public static final Material[] meats = {
@@ -258,7 +259,7 @@ public class Origins implements Listener {
     public void onPlayerRespawnEvent(PlayerRespawnEvent event) {
         Player player = event.getPlayer();
         ApplyOriginCustom(player, playersData.get(player.getUniqueId()).origin);
-        ApplyOriginEffects(player, playersData.get(player.getUniqueId()).origin);
+        new ApplyEffectsTask(plugin, player, playersData.get(player.getUniqueId()).origin).runTaskLater(plugin, 1);
     }
 
     @EventHandler
@@ -288,6 +289,10 @@ public class Origins implements Listener {
                     inventory.setItemInOffHand(null);
                 world.dropItem(location, item);
                 break;
+            case Elytrian:
+                if (player.isGliding())
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 2, 1, true, false));
+                break;
         }
     }
 
@@ -298,7 +303,7 @@ public class Origins implements Listener {
         Material itemType = event.getItem().getType();
 
         if (itemType.equals(Material.MILK_BUCKET)) {
-            ApplyOriginEffects(player, origin);
+            new ApplyEffectsTask(plugin, player, origin).runTaskLater(plugin, 1);
             return;
         }
 
