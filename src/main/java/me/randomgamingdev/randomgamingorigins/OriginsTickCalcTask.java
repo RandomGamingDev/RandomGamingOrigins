@@ -1,5 +1,6 @@
 package me.randomgamingdev.randomgamingorigins;
 
+import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -32,7 +33,13 @@ public class OriginsTickCalcTask extends BukkitRunnable {
                     break;
                 case Elytrian:
                     if (player.isGliding())
-                        player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 2, 1, true, false));
+                        player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 2, 0, true, false));
+                    break;
+                case Piglin:
+                    Material item = player.getInventory().getItemInMainHand().getType();
+                    for (Material tool : Origins.goldenTools)
+                        if (item == tool)
+                            player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 2, 0, true, false));
                     break;
             }
     }
