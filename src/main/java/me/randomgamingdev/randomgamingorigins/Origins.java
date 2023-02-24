@@ -17,10 +17,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerItemConsumeEvent;
-import org.bukkit.event.player.PlayerRespawnEvent;
-import org.bukkit.event.player.PlayerSwapHandItemsEvent;
+import org.bukkit.event.player.*;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
@@ -44,7 +41,7 @@ enum Origin {
                     "§7- Tailwind: You have speed 1",
                     "§7- Featherweight: You have feather falling 1",
                     "§7- Vegetarian: You can't eat meat"),
-            new Object[]{ new Pair(PotionEffectType.SPEED, 1), new Pair(PotionEffectType.SLOW_FALLING, 1) }, 10 * 2),
+            new Object[]{ new Pair(PotionEffectType.SPEED, 0), new Pair(PotionEffectType.SLOW_FALLING, 0) }, 10 * 2),
     Phantom("Phantom",
             createGuiItem(Material.PHANTOM_MEMBRANE, true,
                     "§r§fPhantom",
@@ -72,14 +69,14 @@ enum Origin {
                     "§7- Fire Immunity: You don't take fire damage",
                     "§7- Burning Wrath: You deal more damage while on fire",
                     "§7- Hydrophobia: You take damage in water as if it were lava"),
-            new Object[]{ new Pair(PotionEffectType.FIRE_RESISTANCE, 1) }, 10 * 2),
+            new Object[]{ new Pair(PotionEffectType.FIRE_RESISTANCE, 0) }, 10 * 2),
     Feline("Feline",
             createGuiItem(Material.ORANGE_WOOL, true,
                     "§r§fFeline",
                     "§7- Acrobatics: you take no fall damage",
                     "§7- Strong Ankles: You have jump boost 1",
                     "§7- Nine Lives: You have 9 hearts total"),
-            new Object[]{ new Pair(PotionEffectType.JUMP, 1) }, 9 * 2),
+            new Object[]{}, 9 * 2),
     Enderian("Enderian",
             createGuiItem(Material.ENDER_PEARL, true,
                     "§r§fEnderian",
@@ -103,7 +100,7 @@ enum Origin {
                     "§7even through death",
                     "§7- Hard Shell: You have natural armor",
                     "§7- Unwieldy: You cannot use shields"),
-            new Object[]{ new Pair(PotionEffectType.HUNGER, 1) }, 10 * 2),
+            new Object[]{ new Pair(PotionEffectType.HUNGER, 0) }, 10 * 2),
     Fox("Fox",
             createGuiItem(Material.SWEET_BERRIES, true,
                     "§r§fFox",
@@ -119,7 +116,7 @@ enum Origin {
                     "§7- Fast Metabolism: You loose hunger faster",
                     "§7- Unwieldy: You cannot use shields",
                     "§7- Smaller Heart: You have 6 max hearts"),
-            new Object[]{ new Pair(PotionEffectType.HUNGER, 1), new Pair(PotionEffectType.NIGHT_VISION, 1) }, 6 * 2),
+            new Object[]{ new Pair(PotionEffectType.HUNGER, 0), new Pair(PotionEffectType.NIGHT_VISION, 0) }, 6 * 2),
     Merling("Merling",
             createGuiItem(Material.COD, true,
                     "§r§fMerling",
@@ -157,6 +154,7 @@ public class Origins implements Listener {
             Material.PUFFERFISH,
             Material.ROTTEN_FLESH
     };
+
     public static void ApplyOriginMaxHealth(Player player, Origin origin) {
         player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(origin.maxHealth);
     }
@@ -186,6 +184,14 @@ public class Origins implements Listener {
                 break;
             default:
                 playerData.inventory = null;
+                break;
+        }
+    }
+
+    public static void ApplyOriginAttributes(Player player, Origin origin) {
+        switch (origin) {
+            default:
+                player.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(4);
                 break;
         }
     }
@@ -233,6 +239,7 @@ public class Origins implements Listener {
         Origin origin = playerData.origin;
         DropOriginInv(player, playerData);
         ApplyOriginInv(playerData);
+        ApplyOriginAttributes(player, playerData.origin);
         ApplyOriginCustom(player, origin);
         ClearEffects(player);
         ApplyOriginEffects(player, origin);
@@ -289,10 +296,6 @@ public class Origins implements Listener {
                     inventory.setItemInOffHand(null);
                 world.dropItem(location, item);
                 break;
-            case Elytrian:
-                if (player.isGliding())
-                    player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 2, 1, true, false));
-                break;
         }
     }
 
@@ -340,7 +343,7 @@ public class Origins implements Listener {
                     break;
                 playerData.abilityTimer = 60;
                 player.setVelocity(player.getVelocity().setY(1));
-                player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 2 * 20, 2, true, false));
+                player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 2 * 20, 1, true, false));
                 break;
             case Shulk:
                 event.setCancelled(true);
@@ -365,7 +368,7 @@ public class Origins implements Listener {
                 if (player.hasPotionEffect(PotionEffectType.INVISIBILITY))
                     player.removePotionEffect(PotionEffectType.INVISIBILITY);
                 else
-                    player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 1, true, false));
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 0, true, false));
                 break;
         }
     }

@@ -2,6 +2,7 @@ package me.randomgamingdev.randomgamingorigins;
 
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -30,7 +31,9 @@ public class OriginsSecondCalcTask extends BukkitRunnable {
             switch (playerData.origin) {
                 case Blazeborn:
                     if (player.getFireTicks() > 0)
-                        player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 30, 1, true, false));
+                        player.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(4);
+                    else
+                        player.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(1);
                     if (player.isInWater())
                         player.damage(2);
                     break;
@@ -51,11 +54,11 @@ public class OriginsSecondCalcTask extends BukkitRunnable {
                     break;
                 case Phantom:
                     if (player.hasPotionEffect(PotionEffectType.INVISIBILITY))
-                        player.addPotionEffect(new PotionEffect(PotionEffectType.HUNGER, 20, 1, true, false));
+                        player.addPotionEffect(new PotionEffect(PotionEffectType.HUNGER, 20, 0, true, false));
                     break;
                 case Feline:
                     if (player.isSprinting())
-                        player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 30, 1, true, false));
+                        player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 30, 0, true, false));
                     break;
             }
         }
