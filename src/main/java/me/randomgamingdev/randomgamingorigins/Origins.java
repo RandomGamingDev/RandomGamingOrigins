@@ -186,7 +186,6 @@ public class Origins implements Listener {
     public static void ApplyOriginEffects(Player player, Origin origin) {
         for (Object effectObj : origin.initEffects) {
             Pair<PotionEffectType, Integer> effect = (Pair<PotionEffectType, Integer>)effectObj;
-            System.out.println(Integer.MAX_VALUE);
             player.addPotionEffect(new PotionEffect(effect.first, Integer.MAX_VALUE, effect.second, true, false));
         }
     }
