@@ -117,7 +117,7 @@ enum Origin {
             createGuiItem(Material.COD, true,
                     "§r§fMerling",
                     "§7- Gills: You can breathe under water",
-                    "§7- Adaptation: You can break blocks under water as if you were on land",
+                    "§7- Adaptation: Water invigorates you, allowing you to mine faster",
                     "§7- Fins: You have permanent dolphins grace",
                     "§7- Gills: You cannot breath on land"),
             new Object[]{ new Pair(PotionEffectType.DOLPHINS_GRACE, 0) }, 10 * 2),
@@ -186,6 +186,7 @@ public class Origins implements Listener {
     public static void ApplyOriginEffects(Player player, Origin origin) {
         for (Object effectObj : origin.initEffects) {
             Pair<PotionEffectType, Integer> effect = (Pair<PotionEffectType, Integer>)effectObj;
+            System.out.println(Integer.MAX_VALUE);
             player.addPotionEffect(new PotionEffect(effect.first, Integer.MAX_VALUE, effect.second, true, false));
         }
     }
@@ -210,6 +211,7 @@ public class Origins implements Listener {
     public static void ApplyOriginAttributes(Player player, Origin origin) {
         switch (origin) {
             default:
+                player.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(1);
                 player.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(4);
                 break;
         }
@@ -275,6 +277,7 @@ public class Origins implements Listener {
         switch (Origins.playersData.get(player.getUniqueId()).origin) {
             case Feline:
             case Fox:
+            case Frog:
                 if (event.getCause() == EntityDamageEvent.DamageCause.FALL)
                     event.setCancelled(true);
                 break;
@@ -425,11 +428,15 @@ public class Origins implements Listener {
 
         for (Map.Entry<UUID, PlayerData> mapEntry : Origins.playersData.entrySet()) {
             UUID playerId = mapEntry.getKey();
+            if (playerId == null)
+                continue;
             PlayerData playerData = mapEntry.getValue();
+            if (playerData.origin == null)
+                continue;
 
-            saveData.append(String.format("Player: %s\nOrigin: %s\nOriInv: ",
+            saveData.append(String.format("Player: %s\nOrigin: %d\nOriInv: ",
                     playerId.toString(),
-                    String.valueOf(playerData.origin.ordinal())));
+                    playerData.origin.ordinal()));
 
             if (playerData.inventory == null) {
                 saveData.append("null\n");

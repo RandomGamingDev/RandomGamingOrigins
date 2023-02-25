@@ -46,6 +46,7 @@ public class OriginsSecondCalcTask extends BukkitRunnable {
     public void run() {
         for (Player player : plugin.getServer().getOnlinePlayers()) {
             PlayerData playerData = Origins.playersData.get(player.getUniqueId());
+            TickDown(player, playerData);
             switch (playerData.origin) {
                 case Blazeborn:
                     if (player.getFireTicks() > 0)
@@ -61,17 +62,10 @@ public class OriginsSecondCalcTask extends BukkitRunnable {
                     if (player.getRemainingAir() <= 0)
                         player.damage(1);
                     break;
-                case Fox:
-                    TickDown(player, playerData);
-                    break;
                 case Enderian:
-                    TickDown(player, playerData);
                     if (player.isInWater())
                         player.damage(1);
                     RainDamage(player, 1);
-                    break;
-                case Elytrian:
-                    TickDown(player, playerData);
                     break;
                 case Phantom:
                     if (player.hasPotionEffect(PotionEffectType.INVISIBILITY))
