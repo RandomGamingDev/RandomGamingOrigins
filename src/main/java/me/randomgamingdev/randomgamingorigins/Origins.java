@@ -15,6 +15,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
@@ -274,7 +275,16 @@ public class Origins implements Listener {
             return;
 
         Player player = (Player)entity;
-        switch (Origins.playersData.get(player.getUniqueId()).origin) {
+        PlayerData playerData = Origins.playersData.get(player.getUniqueId());
+
+        if (playerData.removeDeathCause) {
+            playerData.deathCause = null;
+            playerData.removeDeathCause = false;
+        }
+        else if (playerData.deathCause != null)
+            playerData.removeDeathCause = true;
+
+        switch (playerData.origin) {
             case Feline:
             case Fox:
             case Frog:
@@ -282,6 +292,16 @@ public class Origins implements Listener {
                     event.setCancelled(true);
                 break;
         }
+    }
+
+    @EventHandler
+    public void onPlayerDeathEvent(PlayerDeathEvent event) {
+        Player player = event.getEntity().getPlayer();
+        PlayerData playerData = playersData.get(player.getUniqueId());
+        if (playerData.deathCause == null)
+            return;
+        event.setDeathMessage(playerData.deathCause);
+        playerData.removeDeathCause = false;
     }
 
     @EventHandler

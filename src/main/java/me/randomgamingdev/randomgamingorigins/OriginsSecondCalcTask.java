@@ -27,7 +27,20 @@ public class OriginsSecondCalcTask extends BukkitRunnable {
         playerData.abilityTimer--;
     }
 
-    public void RainDamage(Player player, double damage) {
+    public void WaterDamage(Player player, PlayerData playerData, double damage) {
+        if (!player.isInWater())
+            return;
+        switch (playerData.origin) {
+            case Blazeborn:
+                playerData.deathCause = String.format("%s burned out", player.getName());
+                break;
+            default:
+                playerData.deathCause = String.format("%s died of water", player.getName());
+        }
+        player.damage(damage);
+    }
+
+    public void RainDamage(Player player, PlayerData playerData, double damage) {
         if (player.getInventory().getHelmet() != null)
             return;
         World world = player.getWorld();
@@ -38,8 +51,16 @@ public class OriginsSecondCalcTask extends BukkitRunnable {
         if (temperature < 0.15 || temperature > 0.95)
             return;
         int blockLocation = world.getHighestBlockYAt(location);
-        if (blockLocation <= player.getLocation().getY())
-            player.damage(damage);
+        if (blockLocation > player.getLocation().getY())
+            return;
+        switch (playerData.origin) {
+            case Blazeborn:
+                playerData.deathCause = String.format("%s burned out", player.getName());
+                break;
+            default:
+                playerData.deathCause = String.format("%s died of rain", player.getName());
+        }
+        player.damage(damage);
     }
 
     @Override
@@ -53,19 +74,18 @@ public class OriginsSecondCalcTask extends BukkitRunnable {
                         player.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(4);
                     else
                         player.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(1);
-                    if (player.isInWater())
-                        player.damage(2);
-
-                    RainDamage(player, 1);
+                    WaterDamage(player, playerData, 2);
+                    RainDamage(player, playerData, 1);
                     break;
                 case Merling:
-                    if (player.getRemainingAir() <= 0)
-                        player.damage(1);
+                    if (player.getRemainingAir() > 0)
+                        return;
+                    playerData.deathCause = String.format("%s drowned", player.getName());
+                    player.damage(1);
                     break;
                 case Enderian:
-                    if (player.isInWater())
-                        player.damage(1);
-                    RainDamage(player, 1);
+                    WaterDamage(player, playerData, 2);
+                    RainDamage(player, playerData, 1);
                     break;
                 case Phantom:
                     if (player.hasPotionEffect(PotionEffectType.INVISIBILITY))
