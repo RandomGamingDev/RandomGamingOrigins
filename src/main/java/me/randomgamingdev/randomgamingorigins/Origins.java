@@ -120,7 +120,20 @@ enum Origin {
                     "§7- Adaptation: You can break blocks under water as if you were on land",
                     "§7- Fins: You have permanent dolphins grace",
                     "§7- Gills: You cannot breath on land"),
-            new Object[]{ new Pair(PotionEffectType.DOLPHINS_GRACE, 0) }, 10 * 2);
+            new Object[]{ new Pair(PotionEffectType.DOLPHINS_GRACE, 0) }, 10 * 2),
+    Frog("Frog",
+            createGuiItem(Material.SLIME_BALL, true,
+                    "§r§fMerling",
+                    "§7- Amphibious: You can breathe both in and out of water",
+                    "§7- Webbed Feet: You have dolphins grace",
+                    "§7- Hippity-Hoppity: You have jump boost 2",
+                    "§7- Small Heart: You have 3 less hearts than a normal player",
+                    "§7- Leap of Faith: Press your offhand swap key to get launched into the air"),
+            new Object[]{
+                    new Pair(PotionEffectType.DOLPHINS_GRACE, 0),
+                    new Pair(PotionEffectType.WATER_BREATHING, 0),
+                    new Pair(PotionEffectType.JUMP, 1)
+            }, 7 * 2);
 
     final public String name;
     final public ItemStack item;
@@ -382,10 +395,10 @@ public class Origins implements Listener {
                 player.launchProjectile(EnderPearl.class);
                 break;
             case Elytrian:
+                event.setCancelled(true);
                 if (playerData.abilityTimer > 0)
                     break;
                 playerData.abilityTimer = 60;
-                event.setCancelled(true);
                 player.setVelocity(player.getVelocity().setY(2));
                 break;
             case Phantom:
@@ -394,6 +407,13 @@ public class Origins implements Listener {
                     player.removePotionEffect(PotionEffectType.INVISIBILITY);
                 else
                     player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 0, true, false));
+                break;
+            case Frog:
+                event.setCancelled(true);
+                if (playerData.abilityTimer > 0)
+                    break;
+                playerData.abilityTimer = 60;
+                player.setVelocity(player.getVelocity().setY(2));
                 break;
         }
     }
