@@ -28,7 +28,7 @@ public final class RandomGamingOrigins extends JavaPlugin {
                 OriginsGui.onJoin(player);
         new OriginsSecondCalcTask(this).runTaskTimer(this, 0, 20);
         new OriginsTickCalcTask(this).runTaskTimer(this, 0, 1);
-        new SaveTask().runTaskTimer(this, 60 * 20, 60 * 20);
+        new SaveTask().runTaskTimer(this, 0, 60 * 20);
     }
 
     @Override

@@ -118,7 +118,6 @@ enum Origin {
             createGuiItem(Material.COD, true,
                     "§r§fMerling",
                     "§7- Gills: You can breathe under water",
-                    "§7- Acrobatics: You never take fall damage",
                     "§7- Adaptation: Water invigorates you, allowing you to mine faster",
                     "§7- Fins: You have permanent dolphins grace",
                     "§7- Gills: You cannot breath on land"),
@@ -479,13 +478,14 @@ public class Origins implements Listener {
 
         switch (origin) {
             case Fox:
-                event.setCancelled(true);
                 if (player.isSneaking()) {
+                    event.setCancelled(true);
                     player.openInventory(playerData.inventory);
                     break;
                 }
                 if (playerData.abilityTimer > 0)
                     break;
+                event.setCancelled(true);
                 playerData.abilityTimer = 60;
                 player.setVelocity(player.getVelocity().setY(1));
                 player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 2 * 20, 1, true, false));
@@ -502,10 +502,10 @@ public class Origins implements Listener {
                 player.launchProjectile(EnderPearl.class);
                 break;
             case Elytrian:
-                event.setCancelled(true);
                 if (playerData.abilityTimer > 0)
                     break;
                 playerData.abilityTimer = 60;
+                event.setCancelled(true);
                 player.setVelocity(player.getVelocity().setY(2));
                 break;
             case Phantom:
@@ -516,17 +516,17 @@ public class Origins implements Listener {
                     player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 0, true, false));
                 break;
             case Frog:
-                event.setCancelled(true);
                 if (playerData.abilityTimer > 0)
                     break;
                 playerData.abilityTimer = 60;
+                event.setCancelled(true);
                 player.setVelocity(player.getVelocity().setY(2));
                 break;
             case Evoker:
-                event.setCancelled(true);
                 if (playerData.abilityTimer > 0)
                     break;
                 playerData.abilityTimer = 60;
+                event.setCancelled(true);
                 player.getWorld().spawnEntity(player.getLocation(), EntityType.VEX);
                 break;
         }
