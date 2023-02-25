@@ -123,7 +123,7 @@ enum Origin {
             new Object[]{ new Pair(PotionEffectType.DOLPHINS_GRACE, 0) }, 10 * 2),
     Frog("Frog",
             createGuiItem(Material.SLIME_BALL, true,
-                    "§r§fMerling",
+                    "§r§fFrog",
                     "§7- Amphibious: You can breathe both in and out of water",
                     "§7- Webbed Feet: You have dolphins grace",
                     "§7- Hippity-Hoppity: You have jump boost 2",
