@@ -128,6 +128,7 @@ enum Origin {
                     "§7- Webbed Feet: You have dolphins grace",
                     "§7- Hippity-Hoppity: You have jump boost 2",
                     "§7- Small Heart: You have 3 less hearts than a normal player",
+                    "§7- Unwieldy: You cannot use shields",
                     "§7- Leap of Faith: Press your offhand swap key to get launched into the air"),
             new Object[]{
                     new Pair(PotionEffectType.DOLPHINS_GRACE, 0),
@@ -321,6 +322,7 @@ public class Origins implements Listener {
         switch (origin) {
             case Shulk:
             case Fox:
+            case Frog:
                 if (!itemType.equals(Material.SHIELD))
                     break;
                 player.sendMessage(String.format("%s's can't use shields!", origin.name));
