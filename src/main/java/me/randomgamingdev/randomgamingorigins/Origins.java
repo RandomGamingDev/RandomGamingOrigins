@@ -117,6 +117,7 @@ enum Origin {
             createGuiItem(Material.COD, true,
                     "§r§fMerling",
                     "§7- Gills: You can breathe under water",
+                    "§7- Acrobatics: You never take fall damage",
                     "§7- Adaptation: Water invigorates you, allowing you to mine faster",
                     "§7- Fins: You have permanent dolphins grace",
                     "§7- Gills: You cannot breath on land"),
