@@ -7,14 +7,14 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.EnderPearl;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemFlag;
@@ -136,7 +136,23 @@ enum Origin {
                     new Pair(PotionEffectType.DOLPHINS_GRACE, 0),
                     new Pair(PotionEffectType.WATER_BREATHING, 0),
                     new Pair(PotionEffectType.JUMP, 1)
-            }, 7 * 2);
+            }, 7 * 2),
+    Evoker("Evoker",
+         createGuiItem(Material.TOTEM_OF_UNDYING, true,
+                 "§r§fEvoker",
+                 "§7- Feared: You constantly have bad omen 5",
+                 "§7- Fearsome: Villagers refuse to trade with you and",
+                 "§7iron golems attack on sight",
+                 "§7- Ally: You're allies with the rest of the illagers and",
+                 "§7their spawn unless you provoke them",
+                 "§7- Magician: You can summon vexes to fight for you at will",
+                 "§7- Old Age: You have 1 less heart than a normal player and",
+                 "§7 permanent slowness 1",
+                 "§7- Unwieldy: You cannot use shields"),
+            new Object[]{
+                new Pair(PotionEffectType.BAD_OMEN, 4),
+                new Pair(PotionEffectType.SLOW, 0),
+    }, 9 * 2);
 
     final public String name;
     final public ItemStack item;
@@ -174,6 +190,15 @@ public class Origins implements Listener {
             Material.GOLDEN_PICKAXE,
             Material.GOLDEN_SHOVEL,
             Material.GOLDEN_HOE
+    };
+
+    public static final EntityType[] illagers = {
+            EntityType.EVOKER,
+            EntityType.VINDICATOR,
+            EntityType.PILLAGER,
+            EntityType.VEX,
+            EntityType.ILLUSIONER,
+            EntityType.RAVAGER
     };
 
     public static void ApplyOriginMaxHealth(Player player, Origin origin) {
@@ -269,6 +294,62 @@ public class Origins implements Listener {
     }
 
     @EventHandler
+    public void onPlayerInteractEntityEvent(PlayerInteractEntityEvent event) {
+        Player player = event.getPlayer();
+        PlayerData playerData = playersData.get(player.getUniqueId());
+        Entity entity = event.getRightClicked();
+
+        switch (playerData.origin) {
+            case Evoker:
+                if (entity instanceof Villager)
+                    event.setCancelled(true);
+                break;
+        }
+    }
+
+    @EventHandler
+    public void onEntityDamageByEntityEvent(EntityDamageByEntityEvent event) {
+        Entity aggressor = event.getDamager();
+        if (!(aggressor instanceof Player))
+            return;
+        Player player = (Player)aggressor;
+        PlayerData playerData = playersData.get(player.getUniqueId());
+        EntityType victim = event.getEntity().getType();
+
+        switch (playerData.origin) {
+            case Evoker:
+                for (EntityType illager : illagers)
+                    if (victim.equals(illager)) {
+                        playerData.feared = true;
+                        break;
+                    }
+                break;
+        }
+    }
+
+    @EventHandler
+    public void onEntityTargetEvent(EntityTargetEvent event) {
+        EntityType entity = event.getEntityType();
+        Entity target = event.getTarget();
+        if (!(target instanceof Player))
+            return;
+        Player player = (Player)target;
+        PlayerData playerData = playersData.get(player.getUniqueId());
+
+        switch (playerData.origin) {
+            case Evoker:
+                if (playerData.feared)
+                    break;
+                for (EntityType illager : illagers)
+                    if (entity.equals(illager)) {
+                        event.setCancelled(true);
+                        break;
+                    }
+                break;
+        }
+    }
+
+    @EventHandler
     public void onEntityDamageEvent(EntityDamageEvent event) {
         Entity entity = event.getEntity();
         if (!(entity instanceof Player))
@@ -346,6 +427,7 @@ public class Origins implements Listener {
             case Shulk:
             case Fox:
             case Frog:
+            case Evoker:
                 if (!itemType.equals(Material.SHIELD))
                     break;
                 player.sendMessage(String.format("%s's can't use shields!", origin.name));
@@ -439,6 +521,13 @@ public class Origins implements Listener {
                     break;
                 playerData.abilityTimer = 60;
                 player.setVelocity(player.getVelocity().setY(2));
+                break;
+            case Evoker:
+                event.setCancelled(true);
+                if (playerData.abilityTimer > 0)
+                    break;
+                playerData.abilityTimer = 60;
+                player.getWorld().spawnEntity(player.getLocation(), EntityType.VEX);
                 break;
         }
     }

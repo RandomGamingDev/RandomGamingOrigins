@@ -6,6 +6,9 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Biome;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.IronGolem;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -90,6 +93,12 @@ public class OriginsSecondCalcTask extends BukkitRunnable {
                 case Phantom:
                     if (player.hasPotionEffect(PotionEffectType.INVISIBILITY))
                         player.addPotionEffect(new PotionEffect(PotionEffectType.HUNGER, 20, 0, true, false));
+                    break;
+                case Evoker:
+                    for (Entity entity : player.getWorld().getEntities())
+                        if (entity.getType().equals(EntityType.IRON_GOLEM) &&
+                            player.getLocation().distance(entity.getLocation()) < 32)
+                            ((IronGolem)entity).setTarget(player);
                     break;
             }
         }

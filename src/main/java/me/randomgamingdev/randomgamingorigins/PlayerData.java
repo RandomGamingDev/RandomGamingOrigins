@@ -8,32 +8,36 @@ public class PlayerData {
     public Inventory inventory;
     public String deathCause;
     public boolean removeDeathCause;
+    public boolean feared;
 
     public void Init(Origin origin,
                      int abilityTimer,
                      Inventory inventory,
                      String deathCause,
-                     boolean removeDeathCause) {
+                     boolean removeDeathCause,
+                     boolean feared) {
         this.origin = origin;
         this.abilityTimer = abilityTimer;
         this.inventory = inventory;
         this.deathCause = deathCause;
         this.removeDeathCause = removeDeathCause;
+        this.feared = feared;
     }
 
     public PlayerData(Origin origin,
                       int abilityTimer,
                       Inventory inventory,
                       String deathCause,
-                      boolean removeDeathCause) {
-        Init(origin, abilityTimer, inventory, deathCause, removeDeathCause);
+                      boolean removeDeathCause,
+                      boolean feared) {
+        Init(origin, abilityTimer, inventory, deathCause, removeDeathCause, feared);
     }
 
     public PlayerData(Origin origin) {
-        Init(origin, 0, null, null, false);
+        Init(origin, 0, null, null, false, false);
     }
 
     public PlayerData() {
-        Init(Origin.Null, 0, null, null, false);
+        Init(Origin.Null, 0, null, null, false, false);
     }
 }
