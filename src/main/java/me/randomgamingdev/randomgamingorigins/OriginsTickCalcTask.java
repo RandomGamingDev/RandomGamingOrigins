@@ -23,10 +23,8 @@ public class OriginsTickCalcTask extends BukkitRunnable {
                     if (player.isInWater()) {
                         player.setRemainingAir(player.getRemainingAir() + 5);
                         player.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, 2, 14, true, false));
-                        player.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(3);
                         break;
                     }
-                    player.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(4);
                     int remainingAir = player.getRemainingAir();
                     if (remainingAir >= 0 && !player.hasPotionEffect(PotionEffectType.WATER_BREATHING))
                         player.setRemainingAir(remainingAir - 6);

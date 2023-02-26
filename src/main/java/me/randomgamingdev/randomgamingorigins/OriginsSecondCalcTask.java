@@ -2,6 +2,7 @@ package me.randomgamingdev.randomgamingorigins;
 
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
@@ -95,9 +96,11 @@ public class OriginsSecondCalcTask extends BukkitRunnable {
                         player.addPotionEffect(new PotionEffect(PotionEffectType.HUNGER, 20, 0, true, false));
                     break;
                 case Evoker:
-                    for (Entity entity : player.getWorld().getEntities())
-                        if (entity.getType().equals(EntityType.IRON_GOLEM) &&
-                            player.getLocation().distance(entity.getLocation()) < 32)
+                    GameMode gameMode = player.getGameMode();
+                    if (gameMode != GameMode.SURVIVAL && gameMode != GameMode.ADVENTURE)
+                        return;
+                    for (Entity entity : player.getNearbyEntities(32, 32, 32))
+                        if (entity.getType().equals(EntityType.IRON_GOLEM))
                             ((IronGolem)entity).setTarget(player);
                     break;
             }
