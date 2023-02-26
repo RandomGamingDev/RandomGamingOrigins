@@ -2,6 +2,7 @@ package me.randomgamingdev.randomgamingorigins;
 
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -40,6 +41,7 @@ public class OriginsSecondCalcTask extends BukkitRunnable {
                 break;
             default:
                 playerData.deathCause = String.format("%s died of water", player.getName());
+                break;
         }
         player.damage(damage);
     }
@@ -63,6 +65,7 @@ public class OriginsSecondCalcTask extends BukkitRunnable {
                 break;
             default:
                 playerData.deathCause = String.format("%s died of rain", player.getName());
+                break;
         }
         player.damage(damage);
     }
@@ -83,7 +86,7 @@ public class OriginsSecondCalcTask extends BukkitRunnable {
                     break;
                 case Merling:
                     if (player.getRemainingAir() > 0)
-                        return;
+                        break;
                     playerData.deathCause = String.format("%s drowned", player.getName());
                     player.damage(1);
                     break;
@@ -98,7 +101,7 @@ public class OriginsSecondCalcTask extends BukkitRunnable {
                 case Evoker:
                     GameMode gameMode = player.getGameMode();
                     if (gameMode != GameMode.SURVIVAL && gameMode != GameMode.ADVENTURE)
-                        return;
+                        break;
                     for (Entity entity : player.getNearbyEntities(32, 32, 32))
                         if (entity.getType().equals(EntityType.IRON_GOLEM))
                             ((IronGolem)entity).setTarget(player);

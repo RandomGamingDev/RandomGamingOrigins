@@ -78,23 +78,25 @@ public class OriginsGui implements Listener {
 
         event.setCancelled(true);
         final ItemStack clickedItem = event.getCurrentItem();
-        if (clickedItem == null || clickedItem.getType().isAir())
+        if (clickedItem == null)
             return;
         int rawSlot = event.getRawSlot();
+        if (rawSlot >= Origin.values().length - 1)
+            return;
         Origin origin = Origin.values()[rawSlot + 1];
 
         Player player = (Player)event.getWhoClicked();
         UUID playerId = player.getUniqueId();
         PlayerData playerData = Origins.playersData.get(playerId);
-        if (playerData.origin == Origin.Null && rawSlot < Origin.values().length - 1) {
-            Origins.playersData.get(playerId).origin = origin;
-            player.closeInventory();
-            Origins.ApplyOrigin(player, playerData);
-        }
+        if (playerData.origin != Origin.Null)
+            return;
+        Origins.playersData.get(playerId).origin = origin;
+        player.closeInventory();
+        Origins.ApplyOrigin(player, playerData);
     }
 
     @EventHandler
-    public static void onInventoryClick(InventoryDragEvent event) {
+    public static void onInventoryDrag(InventoryDragEvent event) {
         if (event.getInventory().equals(inventory))
             event.setCancelled(true);
     }

@@ -26,9 +26,9 @@ public final class RandomGamingOrigins extends JavaPlugin {
         for (Player player : this.getServer().getOnlinePlayers())
             if (Origins.playersData.get(player.getUniqueId()) == null)
                 OriginsGui.onJoin(player);
-        new OriginsSecondCalcTask(this).runTaskTimer(this, 0, 20);
-        new OriginsTickCalcTask(this).runTaskTimer(this, 0, 1);
-        new SaveTask().runTaskTimer(this, 0, 60 * 20);
+        new OriginsSecondCalcTask(this).runTaskTimer(this, 20, 20);
+        new OriginsTickCalcTask(this).runTaskTimer(this, 1, 1);
+        new SaveTask().runTaskTimer(this, 60 * 20, 60 * 20);
     }
 
     @Override
