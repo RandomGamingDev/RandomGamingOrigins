@@ -399,7 +399,8 @@ public class Origins implements Listener {
                     break;
                 playerData.abilityTimer = 60;
                 event.setCancelled(true);
-                player.getWorld().spawnEntity(player.getLocation(), EntityType.VEX);
+                for (int i = 0; i < 3; i++)
+                    player.getWorld().spawnEntity(player.getLocation(), EntityType.VEX);
                 break;
         }
     }
