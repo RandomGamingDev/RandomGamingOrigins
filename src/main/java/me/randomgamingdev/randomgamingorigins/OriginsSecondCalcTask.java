@@ -91,7 +91,7 @@ public class OriginsSecondCalcTask extends BukkitRunnable {
                     player.damage(1);
                     break;
                 case Enderian:
-                    WaterDamage(player, playerData, 2);
+                    WaterDamage(player, playerData, 1);
                     RainDamage(player, playerData, 1);
                     break;
                 case Phantom:
