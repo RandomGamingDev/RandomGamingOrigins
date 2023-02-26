@@ -33,11 +33,11 @@ public class PlayerData {
         Init(origin, abilityTimer, inventory, deathCause, removeDeathCause, feared);
     }
 
-    public PlayerData(Origin origin) {
-        Init(origin, 0, null, null, false, false);
+    public void Init() {
+        Init(Origin.Null, 0, null, null, false, false);
     }
 
     public PlayerData() {
-        Init(Origin.Null, 0, null, null, false, false);
+        Init();
     }
 }
