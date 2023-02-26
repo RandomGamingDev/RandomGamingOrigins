@@ -37,7 +37,7 @@ public class OriginsTickCalcTask extends BukkitRunnable {
                     Material item = player.getInventory().getItemInMainHand().getType();
                     for (Material tool : Origins.goldenTools)
                         if (item == tool)
-                            player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 2, 0, true, false));
+                            player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 2, 1, true, false));
                     break;
             }
     }
