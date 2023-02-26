@@ -209,6 +209,17 @@ public class Origins implements Listener {
     }
 
     @EventHandler
+    public void onEntityResurrectEvent(EntityResurrectEvent event) {
+        if (event.isCancelled())
+            return;
+        Entity entity = event.getEntity();
+        if (!(entity instanceof Player))
+            return;
+        Player player = (Player)entity;
+        PlayerData playerData = playersData.get(player.getUniqueId());
+        new ApplyEffectsTask(plugin, player, playerData.origin).runTaskLater(plugin, 1);
+    }
+    @EventHandler
     public void onEntityDamageEvent(EntityDamageEvent event) {
         Entity entity = event.getEntity();
         if (!(entity instanceof Player))
