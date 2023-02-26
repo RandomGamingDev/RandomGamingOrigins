@@ -143,8 +143,8 @@ public class Origins implements Listener {
 
     public static void ApplyOrigin(Player player, PlayerData playerData) {
         Origin origin = playerData.origin;
+        playerData.feared = false;
         DropOriginInv(player, playerData);
-        playerData.Init();
         ApplyOriginInv(playerData);
         ApplyOriginAttributes(player, playerData.origin);
         ApplyOriginCustom(player, origin);
