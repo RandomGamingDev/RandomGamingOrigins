@@ -101,6 +101,7 @@ public class Origins implements Listener {
             default:
                 player.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(1);
                 player.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(4);
+                player.getAttribute(Attribute.GENERIC_ARMOR).setBaseValue(0);
                 break;
         }
     }
