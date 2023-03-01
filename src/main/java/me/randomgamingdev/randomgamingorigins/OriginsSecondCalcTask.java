@@ -40,7 +40,7 @@ public class OriginsSecondCalcTask extends BukkitRunnable {
                 playerData.deathCause = String.format("%s burned out", player.getName());
                 break;
             default:
-                playerData.deathCause = String.format("%s died of water", player.getName());
+                playerData.deathCause = String.format("%s tried to swim in water", player.getName());
                 break;
         }
         player.damage(damage);
@@ -87,7 +87,7 @@ public class OriginsSecondCalcTask extends BukkitRunnable {
                 case Merling:
                     if (player.getRemainingAir() > 0)
                         break;
-                    playerData.deathCause = String.format("%s drowned", player.getName());
+                    playerData.deathCause = String.format("%s drowned on land", player.getName());
                     player.damage(1);
                     break;
                 case Enderian:

@@ -73,7 +73,7 @@ enum Origin {
                     "§7even through death",
                     "§7- Hard Shell: You have natural armor",
                     "§7- Unwieldy: You cannot use shields"),
-            new Object[]{ new Pair(PotionEffectType.HUNGER, 0), new Pair(PotionEffectType.DAMAGE_RESISTANCE, 0) }, 10 * 2),
+            new Object[]{ new Pair(PotionEffectType.HUNGER, 0) }, 10 * 2),
     Fox("Fox",
             createGuiItem(Material.SWEET_BERRIES, true,
                     "§r§fFox",

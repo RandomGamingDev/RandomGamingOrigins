@@ -95,6 +95,9 @@ public class Origins implements Listener {
 
     public static void ApplyOriginAttributes(Player player, Origin origin) {
         switch (origin) {
+            case Shulk:
+                player.getAttribute(Attribute.GENERIC_ARMOR).setBaseValue(6);
+                break;
             default:
                 player.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(1);
                 player.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(4);
