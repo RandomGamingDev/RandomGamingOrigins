@@ -6,6 +6,8 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.configuration.serialization.ConfigurationSerializable;
+import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
@@ -14,15 +16,18 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.player.*;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.util.io.BukkitObjectInputStream;
+import org.bukkit.util.io.BukkitObjectOutputStream;
+import org.yaml.snakeyaml.external.biz.base64Coder.Base64Coder;
 
-import java.io.File;
-import java.io.FileWriter;
+import java.io.*;
 import java.util.*;
 
 public class Origins implements Listener {
@@ -416,12 +421,13 @@ public class Origins implements Listener {
             UUID playerId = mapEntry.getKey();
             if (playerId == null)
                 continue;
+            String playerIdStr = playerId.toString();
             PlayerData playerData = mapEntry.getValue();
             if (playerData.origin == null)
                 continue;
 
             saveData.append(String.format("Player: %s\nOrigin: %d\nOriInv: ",
-                    playerId.toString(),
+                    playerIdStr,
                     playerData.origin.ordinal()));
 
             if (playerData.inventory == null) {
@@ -429,10 +435,15 @@ public class Origins implements Listener {
                 continue;
             }
 
-            for (ItemStack item : playerData.inventory.getContents())
-                if (item != null)
-                    saveData.append('\n' + RandomGamingOrigins.gson.toJson(item.serialize()));
             saveData.append("\n");
+            try {
+                saveData.append(InvSerialize(playerData.inventory));
+            }
+            catch (Exception e) {
+                System.out.println(String.format("RandomGamingOrigins: Failed to save the inventory of %s",
+                                    playerIdStr));
+                saveData.append("null\n");
+            }
         }
 
         File saveFile = new File(saveFileName);
@@ -483,12 +494,23 @@ public class Origins implements Listener {
                             playerData = new PlayerData();
                             break;
                         }
+
+                        StringBuilder invStr = new StringBuilder();
+
                         while (myReader.hasNextLine()) {
                             line = myReader.nextLine();
-                            if (line.charAt(0) != '{')
+                            if (line.charAt(0) == 'P')
                                 break;
-                            playerData.inventory.addItem(ItemStack.deserialize(RandomGamingOrigins.gson.fromJson(line, new TypeToken<Map<String, Object>>(){}.getType())));
+                            invStr.append(line + '\n');
                         }
+                        try {
+                            playerData.inventory = InvDeserialize(invStr.toString());
+                        }
+                        catch (Exception e) {
+                            System.out.println(String.format("RandomGamingOrigins: Failed to load the inventory of %s",
+                                    playerId.toString()));
+                        }
+
                         Origins.playersData.put(playerId, playerData);
                         playerId = null;
                         playerData = new PlayerData();
@@ -507,6 +529,39 @@ public class Origins implements Listener {
                     String.format("RandomGamingOrigins: Something went wrong while trying to load the save from %s!",
                         saveFileName));
             return false;
+        }
+    }
+
+    public static String InvSerialize(Inventory inventory) throws IOException {
+        try {
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            BukkitObjectOutputStream dataOutput = new BukkitObjectOutputStream(outputStream);
+
+            dataOutput.writeInt(inventory.getSize());
+
+            for (int i = 0; i < inventory.getSize(); i++)
+                dataOutput.writeObject(inventory.getItem(i));
+
+            dataOutput.close();
+            return Base64Coder.encodeLines(outputStream.toByteArray());
+        } catch (Exception e) {
+            throw new IOException("RandomGamingOrigins: Something went wrong while trying to serialize an inventory!", e);
+        }
+    }
+
+    public static Inventory InvDeserialize(String data) throws IOException {
+        try {
+            ByteArrayInputStream inputStream = new ByteArrayInputStream(Base64Coder.decodeLines(data));
+            BukkitObjectInputStream dataInput = new BukkitObjectInputStream(inputStream);
+            Inventory inventory = Bukkit.getServer().createInventory(null, dataInput.readInt());
+
+            for (int i = 0; i < inventory.getSize(); i++)
+                inventory.setItem(i, (ItemStack) dataInput.readObject());
+
+            dataInput.close();
+            return inventory;
+        } catch (ClassNotFoundException e) {
+            throw new IOException("RandomGamingOrigins: Something went wrong while trying to deserialize an inventory!", e);
         }
     }
 }
