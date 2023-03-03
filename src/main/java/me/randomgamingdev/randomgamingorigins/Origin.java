@@ -7,7 +7,7 @@ import org.bukkit.potion.PotionEffectType;
 import static me.randomgamingdev.randomgamingorigins.OriginsGui.createGuiItem;
 
 enum Origin {
-    Null("", null, null, 1),
+    Null("Null", null, new Object[]{}, 10 * 2),
     Avian("Avian",
             createGuiItem(Material.FEATHER, true,
                     "§r§fAvian",
