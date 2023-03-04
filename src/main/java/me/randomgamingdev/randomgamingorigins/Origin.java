@@ -106,7 +106,8 @@ enum Origin {
                     "§7- Hippity-Hoppity: You have jump boost 2",
                     "§7- Small Heart: You have 3 less hearts than a normal player",
                     "§7- Unwieldy: You cannot use shields",
-                    "§7- Leap of Faith: Press your offhand swap key to get launched into the air"),
+                    "§7- Leap of Faith: Press your offhand swap key to get launched into the air",
+                    "§7which allows you to deal more damage"),
             new Object[]{
                     new Pair(PotionEffectType.DOLPHINS_GRACE, 0),
                     new Pair(PotionEffectType.WATER_BREATHING, 0),

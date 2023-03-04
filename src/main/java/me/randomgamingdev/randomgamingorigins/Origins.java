@@ -402,6 +402,7 @@ public class Origins implements Listener {
                 playerData.abilityTimer = 60;
                 event.setCancelled(true);
                 player.setVelocity(player.getVelocity().setY(2));
+                player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 4 * 20, 2, true, false));
                 break;
             case Evoker:
                 if (playerData.abilityTimer > 0)
