@@ -500,7 +500,7 @@ public class Origins implements Listener {
 
                         while (myReader.hasNextLine()) {
                             line = myReader.nextLine();
-                            if (line.charAt(0) == 'P')
+                            if (line.charAt(6) == ':')
                                 break;
                             invStr.append(line + '\n');
                         }
