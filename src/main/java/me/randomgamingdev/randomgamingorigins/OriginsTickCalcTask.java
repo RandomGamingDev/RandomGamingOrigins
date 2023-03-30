@@ -20,12 +20,13 @@ public class OriginsTickCalcTask extends BukkitRunnable {
         for (Player player : plugin.getServer().getOnlinePlayers())
             switch (Origins.playersData.get(player.getUniqueId()).origin) {
                 case Merling:
+                    int remainingAir = player.getRemainingAir();
                     if (player.isInWater()) {
-                        player.setRemainingAir(player.getRemainingAir() + 5);
+                        if (remainingAir < 300)
+                            player.setRemainingAir(remainingAir + 5);
                         player.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, 2, 14, true, false));
                         break;
                     }
-                    int remainingAir = player.getRemainingAir();
                     if (remainingAir >= 0 && !player.hasPotionEffect(PotionEffectType.WATER_BREATHING))
                         player.setRemainingAir(remainingAir - 6);
                     break;
