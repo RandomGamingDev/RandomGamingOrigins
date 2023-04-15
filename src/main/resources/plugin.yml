@@ -24,3 +24,6 @@ commands:
   originsload:
     usage: /<command> [<string>]
     permission: randomgamingorigins.load
+  weeklyorb:
+    usage: /<command> [<player>]
+    permission: randomgamingorigins.weeklyorb

@@ -133,7 +133,6 @@ public class Origins implements Listener {
                 ItemMeta meta = elytra.getItemMeta();
                 meta.setCustomModelData(1);
                 meta.addEnchant(Enchantment.BINDING_CURSE, 1, true);
-                meta.addEnchant(Enchantment.VANISHING_CURSE, 1, true);
                 meta.setUnbreakable(true);
                 meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
                 meta.setDisplayName(String.format("%s's Elytrian Wings", player.getName()));
@@ -297,6 +296,16 @@ public class Origins implements Listener {
         Material itemType = item.getType();
         Origin origin = playersData.get(player.getUniqueId()).origin;
         Action action = event.getAction();
+
+        PlayerInventory inventory = player.getInventory();
+        ItemStack handItem = inventory.getItemInMainHand();
+
+        if (handItem.getType() == Material.SLIME_BALL && handItem.getItemMeta().getCustomModelData() == 1) {
+            OriginsGui.Gui(player, true);
+            handItem.setAmount(handItem.getAmount() - 1);
+            return;
+        }
+
         if (action == Action.LEFT_CLICK_AIR || action == Action.LEFT_CLICK_BLOCK) {
             switch (origin) {
 
@@ -314,8 +323,7 @@ public class Origins implements Listener {
 
                 Location location = player.getLocation();
                 World world = player.getWorld();
-                PlayerInventory inventory = player.getInventory();
-                if (inventory.getItemInMainHand().getType().equals(Material.SHIELD))
+                if (handItem.getType().equals(Material.SHIELD))
                     inventory.setItemInMainHand(null);
                 else
                     inventory.setItemInOffHand(null);

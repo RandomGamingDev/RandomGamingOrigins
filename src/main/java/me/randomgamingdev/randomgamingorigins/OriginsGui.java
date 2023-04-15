@@ -19,7 +19,7 @@ import java.util.Arrays;
 import java.util.UUID;
 
 public class OriginsGui implements Listener {
-    private final RandomGamingOrigins plugin;
+    private static RandomGamingOrigins plugin = null;
     public static Inventory inventory;
 
     public OriginsGui(RandomGamingOrigins plugin) {
@@ -92,6 +92,7 @@ public class OriginsGui implements Listener {
             return;
         Origins.playersData.get(playerId).origin = origin;
         player.closeInventory();
+        Bukkit.getServer().getScheduler().runTaskLater(plugin, player::updateInventory, 1L);
         Origins.ApplyOrigin(player, playerData);
     }
 
