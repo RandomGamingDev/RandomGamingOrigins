@@ -33,7 +33,7 @@ import java.util.*;
 public class Origins implements Listener {
     public static RandomGamingOrigins plugin;
     public static HashMap<UUID, PlayerData> playersData = new HashMap<UUID, PlayerData>();
-    public static final String saveFileName = "./Origins.data";
+    public static final String saveFileName = "Origins.data";
 
     public static final Material[] meats = {
             Material.BEEF, Material.COOKED_BEEF,
@@ -133,6 +133,7 @@ public class Origins implements Listener {
                 ItemMeta meta = elytra.getItemMeta();
                 meta.setCustomModelData(1);
                 meta.addEnchant(Enchantment.BINDING_CURSE, 1, true);
+                meta.addEnchant(Enchantment.VANISHING_CURSE, 1, true);
                 meta.setUnbreakable(true);
                 meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
                 meta.setDisplayName(String.format("%s's Elytrian Wings", player.getName()));
@@ -458,17 +459,21 @@ public class Origins implements Listener {
         File saveFile = new File(saveFileName);
         try {
             if (saveFile.createNewFile())
-                System.out.println("RandomGamingOrigins: New save file created!");
+                System.out.println(
+                        String.format("RandomGamingOrigins: New save named %s file created!",
+                                saveFileName));
             FileWriter myWriter = new FileWriter(saveFileName);
             myWriter.write(saveData.toString());
             myWriter.close();
-            System.out.println("RandomGamingOrigins: Saved successfully!");
+            System.out.println(
+                    String.format("RandomGamingOrigins: Saved successfully to %s!",
+                            saveFileName));
             return true;
         }
         catch (Exception e) {
             System.out.println(e);
             System.out.println(
-                    String.format("RandomGamingOrigins: Something went wrong while trying to save from %s!",
+                    String.format("RandomGamingOrigins: Something went wrong while trying to save to %s!",
                             saveFileName));
             return false;
         }
@@ -476,8 +481,12 @@ public class Origins implements Listener {
 
     public static boolean Load(String saveFileName) {
         File saveFile = new File(saveFileName);
-        if (!saveFile.exists())
+        if (!saveFile.exists()) {
+            System.out.println(
+                    String.format("RandomGamingOrigins: %s doesn't exist!",
+                            saveFileName));
             return false;
+        }
         try {
             UUID playerId = null;
             PlayerData playerData = new PlayerData();
@@ -508,7 +517,7 @@ public class Origins implements Listener {
 
                         while (myReader.hasNextLine()) {
                             line = myReader.nextLine();
-                            if (line.length() > 6 && line.charAt(6) == ':')
+                            if (line.length() >= 7 && line.charAt(6) == ':')
                                 break;
                             invStr.append(line + '\n');
                         }
@@ -521,7 +530,7 @@ public class Origins implements Listener {
                         }
 
                         Origins.playersData.put(playerId, playerData);
-                        playerId = null;
+                        playerId = UUID.fromString(line.substring(8));
                         playerData = new PlayerData();
                         break;
                 }

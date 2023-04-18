@@ -15,7 +15,7 @@ public class CommandOriginsSave implements CommandExecutor {
         else
             saveFileName = args[0];
 
-        boolean successfulSave = Origins.Save(Origins.saveFileName);
+        boolean successfulSave = Origins.Save(saveFileName);
 
         if (!(sender instanceof Player))
             return true;

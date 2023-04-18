@@ -15,7 +15,7 @@ public class CommandOriginsLoad implements CommandExecutor {
         else
             saveFileName = args[0];
 
-        boolean successfulLoad = Origins.Load(Origins.saveFileName);
+        boolean successfulLoad = Origins.Load(saveFileName);
 
         if (!(sender instanceof Player))
             return true;
