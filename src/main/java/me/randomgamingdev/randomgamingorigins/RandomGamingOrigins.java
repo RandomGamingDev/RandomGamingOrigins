@@ -35,6 +35,6 @@ public final class RandomGamingOrigins extends JavaPlugin {
     @Override
     public void onDisable() {
         Origins.Save(Origins.saveFileName);
-        System.out.println("RandomGamingOrigins is starting shutting down!");
+        System.out.println("RandomGamingOrigins is shutting down!");
     }
 }
