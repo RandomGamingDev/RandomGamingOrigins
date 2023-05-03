@@ -1,7 +1,9 @@
-package me.randomgamingdev.randomgamingorigins;
+package me.randomgamingdev.randomgamingorigins.tasks;
 
+import me.randomgamingdev.randomgamingorigins.core.types.Origin;
+import me.randomgamingdev.randomgamingorigins.core.OriginManager;
+import me.randomgamingdev.randomgamingorigins.RandomGamingOrigins;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class ApplyEffectsTask extends BukkitRunnable {
@@ -17,7 +19,7 @@ public class ApplyEffectsTask extends BukkitRunnable {
 
     @Override
     public void run() {
-        Origins.ApplyOriginEffects(player, origin);
+        OriginManager.ApplyOriginEffects(player, origin);
     }
 
 }

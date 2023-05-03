@@ -1,9 +1,9 @@
-package me.randomgamingdev.randomgamingorigins;
+package me.randomgamingdev.randomgamingorigins.tasks;
 
+import me.randomgamingdev.randomgamingorigins.core.OriginManager;
+import me.randomgamingdev.randomgamingorigins.RandomGamingOrigins;
 import org.bukkit.Material;
-import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -11,14 +11,14 @@ import org.bukkit.scheduler.BukkitRunnable;
 public class OriginsTickCalcTask extends BukkitRunnable {
     private final RandomGamingOrigins plugin;
 
-    OriginsTickCalcTask(RandomGamingOrigins plugin) {
+    public OriginsTickCalcTask(RandomGamingOrigins plugin) {
         this.plugin = plugin;
     }
 
     @Override
     public void run() {
         for (Player player : plugin.getServer().getOnlinePlayers())
-            switch (Origins.playersData.get(player.getUniqueId()).origin) {
+            switch (OriginManager.playersData.get(player.getUniqueId()).origin) {
                 case Merling:
                     int remainingAir = player.getRemainingAir();
                     if (player.isInWater()) {
@@ -36,7 +36,7 @@ public class OriginsTickCalcTask extends BukkitRunnable {
                     break;
                 case Piglin:
                     Material item = player.getInventory().getItemInMainHand().getType();
-                    for (Material tool : Origins.goldenTools)
+                    for (Material tool : OriginManager.goldenTools)
                         if (item == tool)
                             player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 2, 1, true, false));
                     break;

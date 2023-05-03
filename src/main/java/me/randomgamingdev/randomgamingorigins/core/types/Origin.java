@@ -1,12 +1,13 @@
-package me.randomgamingdev.randomgamingorigins;
+package me.randomgamingdev.randomgamingorigins.core.types;
 
+import me.randomgamingdev.randomgamingorigins.other.Pair;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
 
-import static me.randomgamingdev.randomgamingorigins.OriginsGui.createGuiItem;
+import static me.randomgamingdev.randomgamingorigins.core.OriginsGui.createGuiItem;
 
-enum Origin {
+public enum Origin {
     Null("Null", null, new Object[]{}, 10 * 2),
     Avian("Avian",
             createGuiItem(Material.FEATHER, true,

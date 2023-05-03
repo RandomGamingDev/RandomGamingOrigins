@@ -1,5 +1,6 @@
-package me.randomgamingdev.randomgamingorigins;
+package me.randomgamingdev.randomgamingorigins.tasks;
 
+import me.randomgamingdev.randomgamingorigins.RandomGamingOrigins;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.scheduler.BukkitRunnable;

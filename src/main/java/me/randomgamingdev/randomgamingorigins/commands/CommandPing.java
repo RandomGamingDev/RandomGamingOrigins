@@ -1,4 +1,4 @@
-package me.randomgamingdev.randomgamingorigins;
+package me.randomgamingdev.randomgamingorigins.commands;
 
 import org.bukkit.entity.*;
 import org.bukkit.command.*;

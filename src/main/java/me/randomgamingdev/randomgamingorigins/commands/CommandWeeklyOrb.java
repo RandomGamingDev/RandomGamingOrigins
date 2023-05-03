@@ -1,19 +1,16 @@
-package me.randomgamingdev.randomgamingorigins;
+package me.randomgamingdev.randomgamingorigins.commands;
 
-import org.bukkit.Bukkit;
+import me.randomgamingdev.randomgamingorigins.core.OriginManager;
+import me.randomgamingdev.randomgamingorigins.core.OriginsGui;
+import me.randomgamingdev.randomgamingorigins.core.types.PlayerData;
+import me.randomgamingdev.randomgamingorigins.other.Time;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.ConsoleCommandSender;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-
-import java.time.LocalDateTime;
-import java.util.Date;
 
 public class CommandWeeklyOrb implements CommandExecutor { // Add weekly orbs with custom model and that look enchatned
     public static ItemStack orb = OriginsGui.createGuiItem(
@@ -27,9 +24,9 @@ public class CommandWeeklyOrb implements CommandExecutor { // Add weekly orbs wi
             "You don't have to worry about that :)"
     );
 
-    CommandWeeklyOrb() {
+    public CommandWeeklyOrb() {
         ItemMeta orbMeta = orb.getItemMeta();
-        orbMeta.setCustomModelData(Origins.originOrbCode);
+        orbMeta.setCustomModelData(OriginManager.originOrbCode);
         orb.setItemMeta(orbMeta);
     }
 
@@ -38,7 +35,7 @@ public class CommandWeeklyOrb implements CommandExecutor { // Add weekly orbs wi
         if (!(sender instanceof Player))
             return false;
         Player player = (Player)sender;
-        PlayerData playerData = Origins.playersData.get(player.getUniqueId());
+        PlayerData playerData = OriginManager.playersData.get(player.getUniqueId());
         long currentTime = System.currentTimeMillis();
         long sinceLastOrb = currentTime - playerData.lastOrb;
         if (sinceLastOrb < Time.week) {

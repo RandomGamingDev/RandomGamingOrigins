@@ -1,5 +1,9 @@
-package me.randomgamingdev.randomgamingorigins;
+package me.randomgamingdev.randomgamingorigins.core;
 
+import me.randomgamingdev.randomgamingorigins.RandomGamingOrigins;
+import me.randomgamingdev.randomgamingorigins.tasks.OpenInvTask;
+import me.randomgamingdev.randomgamingorigins.core.types.Origin;
+import me.randomgamingdev.randomgamingorigins.core.types.PlayerData;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -35,9 +39,9 @@ public class OriginsGui implements Listener {
     }
 
     public static void onJoin(Player player) {
-        PlayerData playerData = Origins.playersData.get(player.getUniqueId());
+        PlayerData playerData = OriginManager.playersData.get(player.getUniqueId());
         if (playerData == null) {
-            Origins.playersData.put(player.getUniqueId(), new PlayerData());
+            OriginManager.playersData.put(player.getUniqueId(), new PlayerData());
             Gui(player, false);
             return;
         }
@@ -67,7 +71,7 @@ public class OriginsGui implements Listener {
 
     public static void Gui(Player player, boolean orb) {
         if (orb)
-            Origins.playersData.get(player.getUniqueId()).origin = Origin.Null;
+            OriginManager.playersData.get(player.getUniqueId()).origin = Origin.Null;
         player.openInventory(inventory);
     }
 
@@ -87,13 +91,13 @@ public class OriginsGui implements Listener {
 
         Player player = (Player)event.getWhoClicked();
         UUID playerId = player.getUniqueId();
-        PlayerData playerData = Origins.playersData.get(playerId);
+        PlayerData playerData = OriginManager.playersData.get(playerId);
         if (playerData.origin != Origin.Null)
             return;
-        Origins.playersData.get(playerId).origin = origin;
+        OriginManager.playersData.get(playerId).origin = origin;
         player.closeInventory();
         Bukkit.getServer().getScheduler().runTaskLater(plugin, player::updateInventory, 1L);
-        Origins.ApplyOrigin(player, playerData);
+        OriginManager.ApplyOrigin(player, playerData);
     }
 
     @EventHandler
@@ -105,7 +109,7 @@ public class OriginsGui implements Listener {
     @EventHandler
     public void onInventoryCloseEvent(InventoryCloseEvent event){
         Player player = (Player)event.getPlayer();
-        if (event.getInventory().equals(inventory) && Origins.playersData.get(player.getUniqueId()).origin == Origin.Null)
+        if (event.getInventory().equals(inventory) && OriginManager.playersData.get(player.getUniqueId()).origin == Origin.Null)
             new OpenInvTask(this.plugin, player, inventory).runTaskLater(this.plugin, 1);
     }
 }

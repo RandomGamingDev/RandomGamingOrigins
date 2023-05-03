@@ -1,10 +1,19 @@
-package me.randomgamingdev.randomgamingorigins;
+package me.randomgamingdev.randomgamingorigins.commands;
 
+import me.randomgamingdev.randomgamingorigins.core.types.Origin;
+import me.randomgamingdev.randomgamingorigins.core.OriginManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.*;
 import org.bukkit.command.*;
 
-public class CommandOriginsGui implements CommandExecutor {
+public class CommandGetOrigin implements CommandExecutor {
+    public String getOrigin(Player player) {
+        Origin origin = OriginManager.playersData.get(player.getUniqueId()).origin;
+        if (origin == Origin.Null || origin == null)
+            return String.format("%s doesn't have an origin!", player.getName());
+        return String.format("%s's a(n) %s", player.getName(), origin.name);
+    }
+
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (sender instanceof ConsoleCommandSender) {
@@ -13,20 +22,21 @@ public class CommandOriginsGui implements CommandExecutor {
             Player target = Bukkit.getPlayer(args[0]);
             if (target == null)
                 return false;
-            OriginsGui.Gui(target, true);
+            System.out.println(getOrigin(target));
             return true;
         }
         if (!(sender instanceof Player))
             return false;
+
         Player player = (Player)sender;
         if (args.length == 0) {
-            OriginsGui.Gui(player, true);
+            player.sendMessage(getOrigin(player));
             return true;
         }
         Player target = Bukkit.getPlayer(args[0]);
         if (target == null)
             return false;
-        OriginsGui.Gui(target, true);
+        player.sendMessage(getOrigin(target));
         return true;
     }
 }

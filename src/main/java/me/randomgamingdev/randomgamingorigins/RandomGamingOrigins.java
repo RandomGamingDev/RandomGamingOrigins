@@ -1,6 +1,12 @@
 package me.randomgamingdev.randomgamingorigins;
 
 import com.google.gson.Gson;
+import me.randomgamingdev.randomgamingorigins.commands.*;
+import me.randomgamingdev.randomgamingorigins.core.OriginManager;
+import me.randomgamingdev.randomgamingorigins.core.OriginsGui;
+import me.randomgamingdev.randomgamingorigins.tasks.OriginsSecondCalcTask;
+import me.randomgamingdev.randomgamingorigins.tasks.OriginsTickCalcTask;
+import me.randomgamingdev.randomgamingorigins.tasks.SaveTask;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -13,19 +19,19 @@ public final class RandomGamingOrigins extends JavaPlugin {
     @Override
     public void onEnable() {
         System.out.println("RandomGamingOrigins is starting up!");
-        Origins.plugin = this;
+        OriginManager.plugin = this;
         this.getCommand("ping").setExecutor(new CommandPing());
         this.getServer().getPluginManager().registerEvents(new OriginsGui(this), this);
-        this.getServer().getPluginManager().registerEvents(new Origins(), this);
+        this.getServer().getPluginManager().registerEvents(new OriginManager(), this);
         this.getCommand("originsgui").setExecutor(new CommandOriginsGui());
         this.getCommand("origins").setExecutor(new CommandOrigins());
         this.getCommand("getorigin").setExecutor(new CommandGetOrigin());
         this.getCommand("originssave").setExecutor(new CommandOriginsSave());
         this.getCommand("originsload").setExecutor(new CommandOriginsLoad());
         this.getCommand("weeklyorb").setExecutor(new CommandWeeklyOrb());
-        Origins.Load(Origins.saveFileName);
+        OriginManager.Load(OriginManager.saveFileName);
         for (Player player : this.getServer().getOnlinePlayers())
-            if (Origins.playersData.get(player.getUniqueId()) == null)
+            if (OriginManager.playersData.get(player.getUniqueId()) == null)
                 OriginsGui.onJoin(player);
         new OriginsTickCalcTask(this).runTaskTimer(this, 0, 1);
         new OriginsSecondCalcTask(this).runTaskTimer(this, 0, 20);
@@ -34,7 +40,7 @@ public final class RandomGamingOrigins extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        Origins.Save(Origins.saveFileName);
+        OriginManager.Save(OriginManager.saveFileName);
         System.out.println("RandomGamingOrigins is shutting down!");
     }
 }

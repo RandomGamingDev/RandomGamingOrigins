@@ -1,19 +1,20 @@
-package me.randomgamingdev.randomgamingorigins;
+package me.randomgamingdev.randomgamingorigins.core;
 
-import com.google.common.reflect.TypeToken;
+import me.randomgamingdev.randomgamingorigins.RandomGamingOrigins;
+import me.randomgamingdev.randomgamingorigins.tasks.ApplyEffectsTask;
+import me.randomgamingdev.randomgamingorigins.core.types.Origin;
+import me.randomgamingdev.randomgamingorigins.other.Pair;
+import me.randomgamingdev.randomgamingorigins.core.types.PlayerData;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
-import org.bukkit.configuration.serialization.ConfigurationSerializable;
-import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.Inventory;
@@ -30,7 +31,7 @@ import org.yaml.snakeyaml.external.biz.base64Coder.Base64Coder;
 import java.io.*;
 import java.util.*;
 
-public class Origins implements Listener {
+public class OriginManager implements Listener {
     public static RandomGamingOrigins plugin;
     public static HashMap<UUID, PlayerData> playersData = new HashMap<UUID, PlayerData>();
     public static final String saveFileName = "Origins.data";
@@ -238,7 +239,7 @@ public class Origins implements Listener {
             return;
 
         Player player = (Player)entity;
-        PlayerData playerData = Origins.playersData.get(player.getUniqueId());
+        PlayerData playerData = OriginManager.playersData.get(player.getUniqueId());
 
         if (playerData.removeDeathCause) {
             playerData.deathCause = null;
@@ -429,7 +430,7 @@ public class Origins implements Listener {
     public static boolean Save(String saveFileName) {
         StringBuilder saveData = new StringBuilder();
 
-        for (Map.Entry<UUID, PlayerData> mapEntry : Origins.playersData.entrySet()) {
+        for (Map.Entry<UUID, PlayerData> mapEntry : OriginManager.playersData.entrySet()) {
             UUID playerId = mapEntry.getKey();
             if (playerId == null)
                 continue;
@@ -509,7 +510,7 @@ public class Origins implements Listener {
                         break;
                     case "OriInv: ":
                         if (data.equals("null")) {
-                            Origins.playersData.put(playerId, playerData);
+                            OriginManager.playersData.put(playerId, playerData);
                             playerId = null;
                             playerData = new PlayerData();
                             break;
@@ -531,7 +532,7 @@ public class Origins implements Listener {
                                     playerId.toString()));
                         }
 
-                        Origins.playersData.put(playerId, playerData);
+                        OriginManager.playersData.put(playerId, playerData);
                         playerId = UUID.fromString(line.substring(8));
                         playerData = new PlayerData();
                         break;

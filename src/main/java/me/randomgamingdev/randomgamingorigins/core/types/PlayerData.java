@@ -1,4 +1,4 @@
-package me.randomgamingdev.randomgamingorigins;
+package me.randomgamingdev.randomgamingorigins.core.types;
 
 import org.bukkit.inventory.Inventory;
 

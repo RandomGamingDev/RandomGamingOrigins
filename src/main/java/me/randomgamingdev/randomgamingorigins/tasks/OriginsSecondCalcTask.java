@@ -1,13 +1,14 @@
-package me.randomgamingdev.randomgamingorigins;
+package me.randomgamingdev.randomgamingorigins.tasks;
 
+import me.randomgamingdev.randomgamingorigins.core.OriginManager;
+import me.randomgamingdev.randomgamingorigins.core.types.PlayerData;
+import me.randomgamingdev.randomgamingorigins.RandomGamingOrigins;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
-import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
-import org.bukkit.block.Biome;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.IronGolem;
@@ -19,7 +20,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 public class OriginsSecondCalcTask extends BukkitRunnable {
     private final RandomGamingOrigins plugin;
 
-    OriginsSecondCalcTask(RandomGamingOrigins plugin) {
+    public OriginsSecondCalcTask(RandomGamingOrigins plugin) {
         this.plugin = plugin;
     }
 
@@ -73,7 +74,7 @@ public class OriginsSecondCalcTask extends BukkitRunnable {
     @Override
     public void run() {
         for (Player player : plugin.getServer().getOnlinePlayers()) {
-            PlayerData playerData = Origins.playersData.get(player.getUniqueId());
+            PlayerData playerData = OriginManager.playersData.get(player.getUniqueId());
             TickDown(player, playerData);
             switch (playerData.origin) {
                 case Blazeborn:

@@ -1,5 +1,6 @@
-package me.randomgamingdev.randomgamingorigins;
+package me.randomgamingdev.randomgamingorigins.commands;
 
+import me.randomgamingdev.randomgamingorigins.core.OriginManager;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -11,11 +12,11 @@ public class CommandOriginsSave implements CommandExecutor {
         String saveFileName;
 
         if (args.length == 0)
-            saveFileName = Origins.saveFileName;
+            saveFileName = OriginManager.saveFileName;
         else
             saveFileName = args[0];
 
-        boolean successfulSave = Origins.Save(saveFileName);
+        boolean successfulSave = OriginManager.Save(saveFileName);
 
         if (!(sender instanceof Player))
             return true;

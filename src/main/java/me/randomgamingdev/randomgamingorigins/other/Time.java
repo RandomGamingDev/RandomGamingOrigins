@@ -1,4 +1,4 @@
-package me.randomgamingdev.randomgamingorigins;
+package me.randomgamingdev.randomgamingorigins.other;
 
 public class Time {
     public static long sec = 1000;
