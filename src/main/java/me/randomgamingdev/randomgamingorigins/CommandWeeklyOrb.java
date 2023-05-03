@@ -29,7 +29,7 @@ public class CommandWeeklyOrb implements CommandExecutor { // Add weekly orbs wi
 
     CommandWeeklyOrb() {
         ItemMeta orbMeta = orb.getItemMeta();
-        orbMeta.setCustomModelData(1);
+        orbMeta.setCustomModelData(Origins.originOrbCode);
         orb.setItemMeta(orbMeta);
     }
 

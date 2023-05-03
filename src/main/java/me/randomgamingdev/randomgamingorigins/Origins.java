@@ -64,6 +64,8 @@ public class Origins implements Listener {
             EntityType.ILLUSIONER,
             EntityType.RAVAGER
     };
+    public static final int elytraCode = 4372198;
+    public static final int originOrbCode = 721398;
 
     public static void ApplyOriginMaxHealth(Player player, Origin origin) {
         player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(origin.maxHealth);
@@ -117,7 +119,7 @@ public class Origins implements Listener {
 
         if (chestplate != null &&
             chestplate.getType().equals(Material.ELYTRA) &&
-            chestplate.getItemMeta().getCustomModelData() == 1)
+            chestplate.getItemMeta().getCustomModelData() == elytraCode)
                 inventory.setChestplate(null);
 
         World world = player.getWorld();
@@ -131,7 +133,7 @@ public class Origins implements Listener {
 
                 ItemStack elytra = new ItemStack(Material.ELYTRA, 1);
                 ItemMeta meta = elytra.getItemMeta();
-                meta.setCustomModelData(1);
+                meta.setCustomModelData(elytraCode);
                 meta.addEnchant(Enchantment.BINDING_CURSE, 1, true);
                 meta.addEnchant(Enchantment.VANISHING_CURSE, 1, true);
                 meta.setUnbreakable(true);
@@ -301,7 +303,7 @@ public class Origins implements Listener {
         PlayerInventory inventory = player.getInventory();
         ItemStack handItem = inventory.getItemInMainHand();
 
-        if (handItem.getType() == Material.SLIME_BALL && handItem.getItemMeta().getCustomModelData() == 1) {
+        if (handItem.getType() == Material.SLIME_BALL && handItem.getItemMeta().getCustomModelData() == originOrbCode) {
             OriginsGui.Gui(player, true);
             handItem.setAmount(handItem.getAmount() - 1);
             return;
@@ -462,7 +464,7 @@ public class Origins implements Listener {
                 System.out.println(
                         String.format("RandomGamingOrigins: New save named %s file created!",
                                 saveFileName));
-            FileWriter myWriter = new FileWriter(saveFileName);
+            FileWriter myWriter = new FileWriter(saveFile);
             myWriter.write(saveData.toString());
             myWriter.close();
             System.out.println(
