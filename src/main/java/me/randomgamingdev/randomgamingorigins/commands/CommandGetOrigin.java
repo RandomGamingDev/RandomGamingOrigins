@@ -11,7 +11,7 @@ public class CommandGetOrigin implements CommandExecutor {
         Origin origin = OriginManager.playersData.get(player.getUniqueId()).origin;
         if (origin == Origin.Null || origin == null)
             return String.format("%s doesn't have an origin!", player.getName());
-        return String.format("%s's a(n) %s", player.getName(), origin.name);
+        return String.format("%s's a(n) %s", player.getName(), origin.origin.name);
     }
 
     @Override

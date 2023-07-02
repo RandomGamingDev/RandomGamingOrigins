@@ -5,7 +5,7 @@ import org.bukkit.inventory.Inventory;
 public class PlayerData {
     public Origin origin;
     public int abilityTimer;
-    public Inventory inventory;
+    public Inventory pouch;
     public String deathCause;
     public boolean removeDeathCause;
     public boolean feared;
@@ -20,7 +20,7 @@ public class PlayerData {
                      long lastOrb) {
         this.origin = origin;
         this.abilityTimer = abilityTimer;
-        this.inventory = inventory;
+        this.pouch = inventory;
         this.deathCause = deathCause;
         this.removeDeathCause = removeDeathCause;
         this.feared = feared;

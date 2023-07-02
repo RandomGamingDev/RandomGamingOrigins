@@ -1,4 +1,4 @@
-package me.randomgamingdev.randomgamingorigins.tasks;
+package me.randomgamingdev.randomgamingorigins.core.tasks;
 
 import me.randomgamingdev.randomgamingorigins.core.OriginManager;
 import me.randomgamingdev.randomgamingorigins.core.types.PlayerData;
@@ -24,7 +24,7 @@ public class OriginsSecondCalcTask extends BukkitRunnable {
         this.plugin = plugin;
     }
 
-    public void TickDown(Player player, PlayerData playerData) {
+    public static void TickDown(Player player, PlayerData playerData) {
         if (playerData.abilityTimer <= 0)
             return;
 
@@ -33,7 +33,7 @@ public class OriginsSecondCalcTask extends BukkitRunnable {
         playerData.abilityTimer--;
     }
 
-    public void WaterDamage(Player player, PlayerData playerData, double damage) {
+    public static void WaterDamage(Player player, PlayerData playerData, double damage) {
         if (!player.isInWater())
             return;
         switch (playerData.origin) {
@@ -47,7 +47,7 @@ public class OriginsSecondCalcTask extends BukkitRunnable {
         player.damage(damage);
     }
 
-    public void RainDamage(Player player, PlayerData playerData, double damage) {
+    public static void RainDamage(Player player, PlayerData playerData, double damage) {
         if (player.getInventory().getHelmet() != null)
             return;
         World world = player.getWorld();
@@ -73,41 +73,10 @@ public class OriginsSecondCalcTask extends BukkitRunnable {
 
     @Override
     public void run() {
-        for (Player player : plugin.getServer().getOnlinePlayers()) {
+        for (final Player player : plugin.getServer().getOnlinePlayers()) {
             PlayerData playerData = OriginManager.playersData.get(player.getUniqueId());
+            playerData.origin.origin.perSecond(player, playerData);
             TickDown(player, playerData);
-            switch (playerData.origin) {
-                case Blazeborn:
-                    if (player.getFireTicks() > 0)
-                        player.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(4);
-                    else
-                        player.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(1);
-                    WaterDamage(player, playerData, 2);
-                    RainDamage(player, playerData, 1);
-                    break;
-                case Merling:
-                    if (player.getRemainingAir() > 0)
-                        break;
-                    playerData.deathCause = String.format("%s drowned on land", player.getName());
-                    player.damage(1);
-                    break;
-                case Enderian:
-                    WaterDamage(player, playerData, 1);
-                    RainDamage(player, playerData, 1);
-                    break;
-                case Phantom:
-                    if (player.hasPotionEffect(PotionEffectType.INVISIBILITY))
-                        player.addPotionEffect(new PotionEffect(PotionEffectType.HUNGER, 20, 0, true, false));
-                    break;
-                case Evoker:
-                    GameMode gameMode = player.getGameMode();
-                    if (gameMode != GameMode.SURVIVAL && gameMode != GameMode.ADVENTURE)
-                        break;
-                    for (Entity entity : player.getNearbyEntities(32, 32, 32))
-                        if (entity.getType().equals(EntityType.IRON_GOLEM))
-                            ((IronGolem)entity).setTarget(player);
-                    break;
-            }
         }
     }
 }

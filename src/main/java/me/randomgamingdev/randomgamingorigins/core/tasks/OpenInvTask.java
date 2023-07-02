@@ -1,4 +1,4 @@
-package me.randomgamingdev.randomgamingorigins.tasks;
+package me.randomgamingdev.randomgamingorigins.core.tasks;
 
 import me.randomgamingdev.randomgamingorigins.RandomGamingOrigins;
 import org.bukkit.entity.Player;

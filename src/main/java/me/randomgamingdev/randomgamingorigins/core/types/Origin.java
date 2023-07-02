@@ -1,33 +1,32 @@
 package me.randomgamingdev.randomgamingorigins.core.types;
 
+import me.randomgamingdev.randomgamingorigins.core.origins.*;
 import me.randomgamingdev.randomgamingorigins.other.Pair;
 import org.bukkit.Material;
+import org.bukkit.entity.Blaze;
+import org.bukkit.entity.Evoker;
+import org.bukkit.entity.Phantom;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
 
 import static me.randomgamingdev.randomgamingorigins.core.OriginsGui.createGuiItem;
 
 public enum Origin {
-    Null("Null", null, new Object[]{}, 10 * 2),
-    Avian("Avian",
-            createGuiItem(Material.FEATHER, true,
-                    "§r§fAvian",
-                    "§7- Tailwind: You have speed 1",
-                    "§7- Featherweight: You have feather falling 1",
-                    "§7- Vegetarian: You can't eat meat"),
-            new Object[]{ new Pair(PotionEffectType.SPEED, 0), new Pair(PotionEffectType.SLOW_FALLING, 0) }, 10 * 2),
-    Phantom("Phantom",
-            createGuiItem(Material.PHANTOM_MEMBRANE, true,
-                    "§r§fPhantom",
-                    "§7- Phantom Form: Press your offhand",
-                    "§7swap key to turn invisible",
-                    "§7- Fragile: You have 3 less hearts than normal players"),
-            new Object[]{}, 7 * 2),
-    Human("Human",
-            createGuiItem(Material.PLAYER_HEAD, true,
-                    "§r§fHuman",
-                    "§7- You're a normal human"),
-            new Object[]{}, 10 * 2),
+    Null(new NullOrigin()),
+    Avian(new AvianOrigin()),
+    Phantom(new PhantomOrigin()),
+    Human(new HumanOrigin()),
+    Elytrian(new ElytrianOrigin()),
+    Blazeborn(new BlazebornOrigin()),
+    Feline(new FelineOrigin()),
+    Enderian(new EnderianOrigin()),
+    Piglin(new PiglinOrigin()),
+    Shulk(new ShulkOrigin()),
+    Fox(new FoxOrigin()),
+    Merling(new MerlingOrigin()),
+    Frog(new FrogOrigin()),
+    Evoker(new EvokerOrigin());
+    /*
     Elytrian("Elytrian",
             createGuiItem(Material.ELYTRA, true,
                     "§r§fElytrian",
@@ -44,13 +43,6 @@ public enum Origin {
                     "§7- Burning Wrath: You deal more damage while on fire",
                     "§7- Hydrophobia: You take damage in water as if it were lava"),
             new Object[]{ new Pair(PotionEffectType.FIRE_RESISTANCE, 0) }, 10 * 2),
-    Feline("Feline",
-            createGuiItem(Material.ORANGE_WOOL, true,
-                    "§r§fFeline",
-                    "§7- Acrobatics: you take no fall damage",
-                    "§7- Strong Ankles: You have jump boost 1",
-                    "§7- Nine Lives: You have 9 hearts total"),
-            new Object[]{ new Pair(PotionEffectType.JUMP, 0) }, 9 * 2),
     Enderian("Enderian",
             createGuiItem(Material.ENDER_PEARL, true,
                     "§r§fEnderian",
@@ -130,15 +122,11 @@ public enum Origin {
                 new Pair(PotionEffectType.BAD_OMEN, 4),
                 new Pair(PotionEffectType.SLOW, 0),
     }, 9 * 2);
+     */
 
-    final public String name;
-    final public ItemStack item;
-    final public Object[] initEffects;
-    final public int maxHealth;
-    Origin(String name, ItemStack item, Object[] initEffects, int maxHealth) {
-        this.name = name;
-        this.item = item;
-        this.initEffects = initEffects;
-        this.maxHealth = maxHealth;
+    public NullOrigin origin;
+
+    Origin(NullOrigin origin) {
+         this.origin = origin;
     }
 }

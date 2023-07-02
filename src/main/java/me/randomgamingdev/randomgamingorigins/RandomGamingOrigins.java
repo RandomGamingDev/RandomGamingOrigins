@@ -4,9 +4,9 @@ import com.google.gson.Gson;
 import me.randomgamingdev.randomgamingorigins.commands.*;
 import me.randomgamingdev.randomgamingorigins.core.OriginManager;
 import me.randomgamingdev.randomgamingorigins.core.OriginsGui;
-import me.randomgamingdev.randomgamingorigins.tasks.OriginsSecondCalcTask;
-import me.randomgamingdev.randomgamingorigins.tasks.OriginsTickCalcTask;
-import me.randomgamingdev.randomgamingorigins.tasks.SaveTask;
+import me.randomgamingdev.randomgamingorigins.core.tasks.OriginsSecondCalcTask;
+import me.randomgamingdev.randomgamingorigins.core.tasks.OriginsTickCalcTask;
+import me.randomgamingdev.randomgamingorigins.core.tasks.SaveTask;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 

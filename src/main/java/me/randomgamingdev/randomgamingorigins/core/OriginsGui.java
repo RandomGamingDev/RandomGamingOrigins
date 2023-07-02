@@ -1,7 +1,7 @@
 package me.randomgamingdev.randomgamingorigins.core;
 
 import me.randomgamingdev.randomgamingorigins.RandomGamingOrigins;
-import me.randomgamingdev.randomgamingorigins.tasks.OpenInvTask;
+import me.randomgamingdev.randomgamingorigins.core.tasks.OpenInvTask;
 import me.randomgamingdev.randomgamingorigins.core.types.Origin;
 import me.randomgamingdev.randomgamingorigins.core.types.PlayerData;
 import org.bukkit.Bukkit;
@@ -35,7 +35,7 @@ public class OriginsGui implements Listener {
         Origin[] origins = Origin.values();
         inventory = Bukkit.createInventory(null, (int)Math.ceil((float)origins.length / 9) * 9, "§2Origins");
         for (int i = 1; i < origins.length; i++)
-            inventory.addItem(origins[i].item);
+            inventory.addItem(origins[i].origin.dispItem);
     }
 
     public static void onJoin(Player player) {

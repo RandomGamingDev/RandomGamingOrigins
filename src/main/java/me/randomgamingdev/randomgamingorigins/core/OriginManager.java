@@ -1,7 +1,7 @@
 package me.randomgamingdev.randomgamingorigins.core;
 
 import me.randomgamingdev.randomgamingorigins.RandomGamingOrigins;
-import me.randomgamingdev.randomgamingorigins.tasks.ApplyEffectsTask;
+import me.randomgamingdev.randomgamingorigins.core.tasks.ApplyEffectsTask;
 import me.randomgamingdev.randomgamingorigins.core.types.Origin;
 import me.randomgamingdev.randomgamingorigins.other.Pair;
 import me.randomgamingdev.randomgamingorigins.core.types.PlayerData;
@@ -65,118 +65,27 @@ public class OriginManager implements Listener {
             EntityType.ILLUSIONER,
             EntityType.RAVAGER
     };
-    public static final int elytraCode = 4372198;
-    public static final int originOrbCode = 721398;
-
-    public static void ApplyOriginMaxHealth(Player player, Origin origin) {
-        player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(origin.maxHealth);
-    }
-
-    public static void ClearEffects(Player player) {
-        for (PotionEffect effect : player.getActivePotionEffects())
-            player.removePotionEffect(effect.getType());
-    }
-
-    public static void ApplyOriginEffects(Player player, Origin origin) {
-        for (Object effectObj : origin.initEffects) {
-            Pair<PotionEffectType, Integer> effect = (Pair<PotionEffectType, Integer>)effectObj;
-            player.addPotionEffect(new PotionEffect(effect.first, Integer.MAX_VALUE, effect.second, true, false));
-        }
-    }
-
-    public static void ApplyOriginInv(PlayerData playerData) {
-        Origin origin = playerData.origin;
-        switch (origin) {
-            case Shulk:
-                playerData.inventory = Bukkit.createInventory(null, 1 * 9,
-                        String.format("§2Your %s Inventory", origin.name));
-                break;
-            case Fox:
-                playerData.inventory = Bukkit.createInventory(null, 1 * 9,
-                        String.format("§2Your %s Inventory", origin.name));
-                break;
-            default:
-                playerData.inventory = null;
-                break;
-        }
-    }
-
-    public static void ApplyOriginAttributes(Player player, Origin origin) {
-        switch (origin) {
-            case Shulk:
-                player.getAttribute(Attribute.GENERIC_ARMOR).setBaseValue(6);
-                break;
-            default:
-                player.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(1);
-                player.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(4);
-                player.getAttribute(Attribute.GENERIC_ARMOR).setBaseValue(0);
-                break;
-        }
-    }
-
-    public static void ApplyOriginCustom(Player player, Origin origin) {
-        PlayerInventory inventory = player.getInventory();
-        ItemStack chestplate = inventory.getChestplate();
-
-        if (chestplate != null &&
-            chestplate.getType().equals(Material.ELYTRA) &&
-            chestplate.getItemMeta().getCustomModelData() == elytraCode)
-                inventory.setChestplate(null);
-
-        World world = player.getWorld();
-        Location location = player.getLocation();
-
-        switch (origin) {
-            case Elytrian:
-                if (inventory.getChestplate() != null)
-                    for (ItemStack item : inventory.addItem(chestplate).values())
-                        world.dropItem(location, item);
-
-                ItemStack elytra = new ItemStack(Material.ELYTRA, 1);
-                ItemMeta meta = elytra.getItemMeta();
-                meta.setCustomModelData(elytraCode);
-                meta.addEnchant(Enchantment.BINDING_CURSE, 1, true);
-                meta.addEnchant(Enchantment.VANISHING_CURSE, 1, true);
-                meta.setUnbreakable(true);
-                meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-                meta.setDisplayName(String.format("%s's Elytrian Wings", player.getName()));
-                elytra.setItemMeta(meta);
-                player.getInventory().setChestplate(elytra);
-                break;
-        }
-    }
-
-    public static void DropOriginInv(Player player, PlayerData playerData) {
-        if (playerData.inventory != null)
-            for (ItemStack item : playerData.inventory.getContents())
-                if (item != null)
-                    player.getWorld().dropItem(player.getLocation(), item);
-    }
+    public static final int elytraCode = 1; //4372198
+    public static final int originOrbCode = 1; //721398
 
     public static void ApplyOrigin(Player player, PlayerData playerData) {
         Origin origin = playerData.origin;
+
         playerData.feared = false;
-        DropOriginInv(player, playerData);
-        ApplyOriginInv(playerData);
-        ApplyOriginAttributes(player, playerData.origin);
-        ApplyOriginCustom(player, origin);
-        ClearEffects(player);
-        ApplyOriginEffects(player, origin);
-        ApplyOriginMaxHealth(player, origin);
+        origin.origin.dropInv(player, playerData);
+        origin.origin.applyInv(player, playerData);
+        origin.origin.applyAttribs(player, playerData);
+        origin.origin.applyCustom(player, playerData);
+        origin.origin.clearEffects(player, playerData);
+        origin.origin.applyEffects(player, playerData);
+        origin.origin.applyMaxHealth(player, playerData);
     }
 
     @EventHandler
     public void onPlayerInteractEntityEvent(PlayerInteractEntityEvent event) {
         Player player = event.getPlayer();
         PlayerData playerData = playersData.get(player.getUniqueId());
-        Entity entity = event.getRightClicked();
-
-        switch (playerData.origin) {
-            case Evoker:
-                if (entity instanceof Villager)
-                    event.setCancelled(true);
-                break;
-        }
+        playerData.origin.origin.onPlayerInteractEntityEvent(event, playerData);
     }
 
     @EventHandler
@@ -184,19 +93,10 @@ public class OriginManager implements Listener {
         Entity aggressor = event.getDamager();
         if (!(aggressor instanceof Player))
             return;
+
         Player player = (Player)aggressor;
         PlayerData playerData = playersData.get(player.getUniqueId());
-        EntityType victim = event.getEntity().getType();
-
-        switch (playerData.origin) {
-            case Evoker:
-                for (EntityType illager : illagers)
-                    if (victim.equals(illager)) {
-                        playerData.feared = true;
-                        break;
-                    }
-                break;
-        }
+        playerData.origin.origin.onEntityDamageByPlayerEvent(event, playerData);
     }
 
     @EventHandler
@@ -205,20 +105,10 @@ public class OriginManager implements Listener {
         Entity target = event.getTarget();
         if (!(target instanceof Player))
             return;
+
         Player player = (Player)target;
         PlayerData playerData = playersData.get(player.getUniqueId());
-
-        switch (playerData.origin) {
-            case Evoker:
-                if (playerData.feared)
-                    break;
-                for (EntityType illager : illagers)
-                    if (entity.equals(illager)) {
-                        event.setCancelled(true);
-                        break;
-                    }
-                break;
-        }
+        playerData.origin.origin.onEntityTargetPlayerEvent(event, playerData);
     }
 
     @EventHandler
@@ -228,8 +118,10 @@ public class OriginManager implements Listener {
         Entity entity = event.getEntity();
         if (!(entity instanceof Player))
             return;
+
         Player player = (Player)entity;
         PlayerData playerData = playersData.get(player.getUniqueId());
+        playerData.origin.origin.onPlayerResurrectEvent(event, playerData);
         new ApplyEffectsTask(plugin, player, playerData.origin).runTaskLater(plugin, 1);
     }
     @EventHandler
@@ -240,6 +132,7 @@ public class OriginManager implements Listener {
 
         Player player = (Player)entity;
         PlayerData playerData = OriginManager.playersData.get(player.getUniqueId());
+        playerData.origin.origin.onPlayerDamageEvent(event, playerData);
 
         if (playerData.removeDeathCause) {
             playerData.deathCause = null;
@@ -247,21 +140,14 @@ public class OriginManager implements Listener {
         }
         else if (playerData.deathCause != null)
             playerData.removeDeathCause = true;
-
-        switch (playerData.origin) {
-            case Feline:
-            case Fox:
-            case Frog:
-                if (event.getCause() == EntityDamageEvent.DamageCause.FALL)
-                    event.setCancelled(true);
-                break;
-        }
     }
 
     @EventHandler
     public void onPlayerDeathEvent(PlayerDeathEvent event) {
         Player player = event.getEntity().getPlayer();
         PlayerData playerData = playersData.get(player.getUniqueId());
+        playerData.origin.origin.onPlayerDeathEvent(event, playerData);
+
         if (playerData.deathCause == null)
             return;
         event.setDeathMessage(playerData.deathCause);
@@ -271,160 +157,39 @@ public class OriginManager implements Listener {
     @EventHandler
     public void onPlayerRespawnEvent(PlayerRespawnEvent event) {
         Player player = event.getPlayer();
-        ApplyOriginCustom(player, playersData.get(player.getUniqueId()).origin);
+        PlayerData playerData = playersData.get(player.getUniqueId());
+        playerData.origin.origin.onPlayerRespawnEvent(event, playerData);
+
+        playerData.origin.origin.applyCustom(player, playerData);
         new ApplyEffectsTask(plugin, player, playersData.get(player.getUniqueId()).origin).runTaskLater(plugin, 1);
     }
 
     @EventHandler
     public void onPlayerItemDamageEvent(PlayerItemDamageEvent event) {
         Player player = event.getPlayer();
-        Material item = event.getItem().getType();
-        if (item == null)
-            return;
-        Origin origin = playersData.get(player.getUniqueId()).origin;
-        switch (origin) {
-            case Piglin:
-                for (Material tool : goldenTools)
-                    if (item == tool && RandomGamingOrigins.rand.nextBoolean())
-                        event.setCancelled(true);
-                break;
-        }
+        PlayerData playerData = playersData.get(player.getUniqueId());
+        playerData.origin.origin.onPlayerItemDamageEvent(event, playerData);
     }
 
     @EventHandler
     public void onPlayerInteractEvent(PlayerInteractEvent event) {
         Player player = event.getPlayer();
-        ItemStack item = event.getItem();
-        if (item == null)
-            return;
-        Material itemType = item.getType();
-        Origin origin = playersData.get(player.getUniqueId()).origin;
-        Action action = event.getAction();
-
-        PlayerInventory inventory = player.getInventory();
-        ItemStack handItem = inventory.getItemInMainHand();
-
-        if (handItem.getType() == Material.SLIME_BALL && handItem.getItemMeta().getCustomModelData() == originOrbCode) {
-            OriginsGui.Gui(player, true);
-            handItem.setAmount(handItem.getAmount() - 1);
-            return;
-        }
-
-        if (action == Action.LEFT_CLICK_AIR || action == Action.LEFT_CLICK_BLOCK) {
-            switch (origin) {
-
-            }
-            return;
-        }
-        switch (origin) {
-            case Shulk:
-            case Fox:
-            case Frog:
-            case Evoker:
-                if (!itemType.equals(Material.SHIELD))
-                    break;
-                player.sendMessage(String.format("%s's can't use shields!", origin.name));
-
-                Location location = player.getLocation();
-                World world = player.getWorld();
-                if (handItem.getType().equals(Material.SHIELD))
-                    inventory.setItemInMainHand(null);
-                else
-                    inventory.setItemInOffHand(null);
-                world.dropItem(location, item);
-                break;
-        }
+        PlayerData playerData = playersData.get(player.getUniqueId());
+        playerData.origin.origin.onPlayerInteractEvent(event, playerData);
     }
 
     @EventHandler
     public void onPlayerItemConsumeEvent(PlayerItemConsumeEvent event) {
         Player player = event.getPlayer();
-        Origin origin = playersData.get(player.getUniqueId()).origin;
-        Material itemType = event.getItem().getType();
-
-        if (itemType.equals(Material.MILK_BUCKET)) {
-            new ApplyEffectsTask(plugin, player, origin).runTaskLater(plugin, 1);
-            return;
-        }
-
-        switch (origin) {
-            case Avian:
-                for (Material meat : meats)
-                    if (itemType == meat) {
-                        player.sendMessage(String.format("%s's can't eat meat!", origin.name));
-                        event.setCancelled(true);
-                        break;
-                    }
-                break;
-            case Fox:
-                if (itemType.equals(Material.SWEET_BERRIES))
-                    player.setFoodLevel(player.getFoodLevel() + 1);
-                break;
-        }
+        PlayerData playerData = playersData.get(player.getUniqueId());
+        playerData.origin.origin.onPlayerItemConsumeEvent(event, playerData);
     }
 
     @EventHandler
     public void onPlayerSwapHandItemsEvent(PlayerSwapHandItemsEvent event) {
         Player player = event.getPlayer();
         PlayerData playerData = playersData.get(player.getUniqueId());
-        Origin origin = playerData.origin;
-
-        switch (origin) {
-            case Fox:
-                if (player.isSneaking()) {
-                    event.setCancelled(true);
-                    player.openInventory(playerData.inventory);
-                    break;
-                }
-                if (playerData.abilityTimer > 0)
-                    break;
-                event.setCancelled(true);
-                playerData.abilityTimer = 60;
-                player.setVelocity(player.getVelocity().setY(1));
-                player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 2 * 20, 1, true, false));
-                break;
-            case Shulk:
-                event.setCancelled(true);
-                player.openInventory(playerData.inventory);
-                break;
-            case Enderian:
-                if (playerData.abilityTimer > 0)
-                    break;
-                playerData.abilityTimer = 60;
-                event.setCancelled(true);
-                player.launchProjectile(EnderPearl.class);
-                break;
-            case Elytrian:
-                if (playerData.abilityTimer > 0)
-                    break;
-                playerData.abilityTimer = 60;
-                event.setCancelled(true);
-                player.setVelocity(player.getVelocity().setY(2));
-                break;
-            case Phantom:
-                event.setCancelled(true);
-                if (player.hasPotionEffect(PotionEffectType.INVISIBILITY))
-                    player.removePotionEffect(PotionEffectType.INVISIBILITY);
-                else
-                    player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 0, true, false));
-                break;
-            case Frog:
-                if (playerData.abilityTimer > 0)
-                    break;
-                playerData.abilityTimer = 60;
-                event.setCancelled(true);
-                player.setVelocity(player.getVelocity().setY(2));
-                player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 4 * 20, 2, true, false));
-                break;
-            case Evoker:
-                if (playerData.abilityTimer > 0)
-                    break;
-                playerData.abilityTimer = 60;
-                event.setCancelled(true);
-                for (int i = 0; i < 3; i++)
-                    player.getWorld().spawnEntity(player.getLocation(), EntityType.VEX);
-                break;
-        }
+        playerData.origin.origin.onPlayerSwapHandItemsEvent(event, playerData);
     }
 
     public static boolean Save(String saveFileName) {
@@ -443,14 +208,14 @@ public class OriginManager implements Listener {
                     playerIdStr,
                     playerData.origin.ordinal()));
 
-            if (playerData.inventory == null) {
+            if (playerData.pouch == null) {
                 saveData.append("null\n");
                 continue;
             }
 
             saveData.append("\n");
             try {
-                saveData.append(InvSerialize(playerData.inventory));
+                saveData.append(InvSerialize(playerData.pouch));
             }
             catch (Exception e) {
                 System.out.println(String.format("RandomGamingOrigins: Failed to save the inventory of %s",
@@ -506,7 +271,7 @@ public class OriginManager implements Listener {
                         break;
                     case "Origin: ":
                         playerData.origin = Origin.values()[Integer.parseInt(data)];
-                        ApplyOriginInv(playerData);
+                        playerData.origin.origin.applyInv(Bukkit.getPlayer(playerId), playerData);
                         break;
                     case "OriInv: ":
                         if (data.equals("null")) {
@@ -525,7 +290,7 @@ public class OriginManager implements Listener {
                             invStr.append(line + '\n');
                         }
                         try {
-                            playerData.inventory = InvDeserialize(invStr.toString());
+                            playerData.pouch = InvDeserialize(invStr.toString());
                         }
                         catch (Exception e) {
                             System.out.println(String.format("RandomGamingOrigins: Failed to load the inventory of %s",
@@ -533,7 +298,7 @@ public class OriginManager implements Listener {
                         }
 
                         OriginManager.playersData.put(playerId, playerData);
-                        playerId = UUID.fromString(line.substring(8));
+                        playerId = null;
                         playerData = new PlayerData();
                         break;
                 }
