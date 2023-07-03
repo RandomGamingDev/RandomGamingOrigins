@@ -219,6 +219,14 @@ public class OriginManager implements Listener {
     public void onPlayerItemConsumeEvent(PlayerItemConsumeEvent event) {
         Player player = event.getPlayer();
         PlayerData playerData = GetPlayerData(player);
+        Origin origin = playerData.origin;
+        Material itemType = event.getItem().getType();
+
+        if (itemType.equals(Material.MILK_BUCKET)) {
+            new ApplyEffectsTask(plugin, player, origin).runTaskLater(plugin, 1);
+            return;
+        }
+
         playerData.origin.origin.onPlayerItemConsumeEvent(event, playerData);
     }
 
