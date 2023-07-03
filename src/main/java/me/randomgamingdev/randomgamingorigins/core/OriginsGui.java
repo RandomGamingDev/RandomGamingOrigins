@@ -39,7 +39,7 @@ public class OriginsGui implements Listener {
     }
 
     public static void onJoin(Player player) {
-        PlayerData playerData = OriginManager.playersData.get(player.getUniqueId());
+        PlayerData playerData = OriginManager.GetPlayerData(player);
         if (playerData == null) {
             OriginManager.playersData.put(player.getUniqueId(), new PlayerData());
             Gui(player, false);
@@ -71,7 +71,7 @@ public class OriginsGui implements Listener {
 
     public static void Gui(Player player, boolean orb) {
         if (orb)
-            OriginManager.playersData.get(player.getUniqueId()).origin = Origin.Null;
+            OriginManager.GetPlayerData(player).origin = Origin.Null;
         player.openInventory(inventory);
     }
 
@@ -109,7 +109,7 @@ public class OriginsGui implements Listener {
     @EventHandler
     public void onInventoryCloseEvent(InventoryCloseEvent event){
         Player player = (Player)event.getPlayer();
-        if (event.getInventory().equals(inventory) && OriginManager.playersData.get(player.getUniqueId()).origin == Origin.Null)
+        if (event.getInventory().equals(inventory) && OriginManager.GetPlayerData(player).origin == Origin.Null)
             new OpenInvTask(this.plugin, player, inventory).runTaskLater(this.plugin, 1);
     }
 }

@@ -19,13 +19,14 @@ public class MerlingOrigin extends NullOrigin {
                         "§7- Gills: You can breathe under water",
                         "§7- Adaptation: Water invigorates you, allowing you to mine faster",
                         "§7- Fins: You have permanent dolphins grace",
+                        "§7- Eyes of the Sea: You have permanent night vision",
                         "§7- Gills: You cannot breath on land");
-        this.initEffects = new Object[]{ new Pair(PotionEffectType.DOLPHINS_GRACE, 0) };
+        this.initEffects = new Object[]{ new Pair(PotionEffectType.DOLPHINS_GRACE, 0), new Pair(PotionEffectType.NIGHT_VISION, 0) };
         this.maxHealth = 10 * 2;
     }
 
     @Override
-    public void perTick(Player player, PlayerData playerData) {
+    public void perPlayerPerTick(Player player, PlayerData playerData) {
         int remainingAir = player.getRemainingAir();
         if (player.isInWater()) {
             if (remainingAir < 300)
@@ -38,7 +39,7 @@ public class MerlingOrigin extends NullOrigin {
     }
 
     @Override
-    public void perSecond(Player player, PlayerData playerData) {
+    public void perPlayerPerSecond(Player player, PlayerData playerData) {
         if (player.getRemainingAir() > 0)
             return;
         playerData.deathCause = String.format("%s drowned on land", player.getName());

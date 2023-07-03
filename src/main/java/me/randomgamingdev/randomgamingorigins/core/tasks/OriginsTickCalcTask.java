@@ -2,6 +2,7 @@ package me.randomgamingdev.randomgamingorigins.core.tasks;
 
 import me.randomgamingdev.randomgamingorigins.core.OriginManager;
 import me.randomgamingdev.randomgamingorigins.RandomGamingOrigins;
+import me.randomgamingdev.randomgamingorigins.core.types.Origin;
 import me.randomgamingdev.randomgamingorigins.core.types.PlayerData;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -20,9 +21,11 @@ public class OriginsTickCalcTask extends BukkitRunnable {
 
     @Override
     public void run() {
+        for (Origin origin : Origin.values())
+            origin.origin.perTick();
         for (final Player player : plugin.getServer().getOnlinePlayers()) {
-            PlayerData playerData = playersData.get(player.getUniqueId());
-            playerData.origin.origin.perTick(player, playerData);
+            PlayerData playerData = OriginManager.GetPlayerData(player);
+            playerData.origin.origin.perPlayerPerTick(player, playerData);
         }
     }
 }

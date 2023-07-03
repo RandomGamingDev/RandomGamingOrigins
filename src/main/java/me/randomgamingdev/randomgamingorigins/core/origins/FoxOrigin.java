@@ -3,12 +3,11 @@ package me.randomgamingdev.randomgamingorigins.core.origins;
 import me.randomgamingdev.randomgamingorigins.core.types.Origin;
 import me.randomgamingdev.randomgamingorigins.core.types.PlayerData;
 import me.randomgamingdev.randomgamingorigins.other.Pair;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
-import org.bukkit.entity.Player;
+import org.bukkit.*;
+import org.bukkit.entity.*;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
@@ -33,12 +32,15 @@ public class FoxOrigin extends NullOrigin {
                         "§7even through death",
                         "§7- Acrobatics: You never take fall damage",
                         "§7- Nocturnal: You have permanent night vision",
+                        "§7- Loyal: You're an ally with fox-kind and as such they will help you battle.",
+                        "§7 They're so loyal in fact they won't fight back if you attack them. Don't do",
+                        "§7 that tho. You don't wanna make them sad do ya?",
                         "§7- Berry Craver: You gain 1 extra hunger point from sweat berries",
-                        "§7- Fast Metabolism: You loose hunger faster",
+                        "§7- Thorn-proof: You're immune to thorns, including both the enchants and",
+                        "§7- objects like cacti, berry bushes, and dripstone",
                         "§7- Unwieldy: You cannot use shields",
                         "§7- Smaller Heart: You have 6 max hearts");
         this.initEffects = new Object[]{
-                                new Pair(PotionEffectType.HUNGER, 0),
                                 new Pair(PotionEffectType.NIGHT_VISION, 0),
                                 new Pair(PotionEffectType.JUMP, 0),
                                 new Pair(PotionEffectType.SPEED, 1)
@@ -53,9 +55,19 @@ public class FoxOrigin extends NullOrigin {
     }
 
     @Override
+    public void onEntityDamageByPlayerEvent(EntityDamageByEntityEvent event, PlayerData playerData) {
+        Entity victim = event.getEntity();
+        for (Entity entity : ((Player)event.getDamager()).getNearbyEntities(32, 32, 32))
+            if (entity.getType().equals(EntityType.FOX))
+                ((Fox)entity).setTarget((LivingEntity)event.getEntity());
+    }
+
+    @Override
     public void onPlayerInteractEvent(PlayerInteractEvent event, PlayerData playerData) {
         Player player = event.getPlayer();
         ItemStack item = event.getItem();
+        if (item == null)
+            return;
         Material itemType = item.getType();
         PlayerInventory inventory = player.getInventory();
         ItemStack handItem = inventory.getItemInMainHand();
@@ -66,7 +78,7 @@ public class FoxOrigin extends NullOrigin {
 
         Location location = player.getLocation();
         World world = player.getWorld();
-        if (handItem.getType().equals(Material.SHIELD))
+        if (handItem != null && handItem.getType().equals(Material.SHIELD))
             inventory.setItemInMainHand(null);
         else
             inventory.setItemInOffHand(null);
@@ -79,7 +91,8 @@ public class FoxOrigin extends NullOrigin {
 
         if (
                 damageCause == EntityDamageEvent.DamageCause.FALL ||
-                damageCause == EntityDamageEvent.DamageCause.THORNS
+                damageCause == EntityDamageEvent.DamageCause.THORNS ||
+                damageCause == EntityDamageEvent.DamageCause.CONTACT
             )
                 event.setCancelled(true);
     }
@@ -106,8 +119,18 @@ public class FoxOrigin extends NullOrigin {
         if (playerData.abilityTimer > 0)
             return;
         event.setCancelled(true);
-        playerData.abilityTimer = 60;
+        playerData.abilityTimer = 15;
         player.setVelocity(player.getVelocity().setY(1));
         player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 2 * 20, 1, true, false));
+    }
+
+    @Override
+    public void perPlayerPerSecond(Player player, PlayerData playerData) {
+        GameMode gameMode = player.getGameMode();
+        if (gameMode != GameMode.SURVIVAL && gameMode != GameMode.ADVENTURE)
+            return;
+        for (Entity entity : player.getNearbyEntities(8, 8, 8))
+            if (entity.getType().equals(EntityType.FOX))
+                ((Fox)entity).setFirstTrustedPlayer((AnimalTamer)player);
     }
 }

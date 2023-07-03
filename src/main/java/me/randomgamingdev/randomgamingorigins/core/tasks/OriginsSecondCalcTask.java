@@ -1,6 +1,7 @@
 package me.randomgamingdev.randomgamingorigins.core.tasks;
 
 import me.randomgamingdev.randomgamingorigins.core.OriginManager;
+import me.randomgamingdev.randomgamingorigins.core.types.Origin;
 import me.randomgamingdev.randomgamingorigins.core.types.PlayerData;
 import me.randomgamingdev.randomgamingorigins.RandomGamingOrigins;
 import net.md_5.bungee.api.ChatMessageType;
@@ -73,9 +74,11 @@ public class OriginsSecondCalcTask extends BukkitRunnable {
 
     @Override
     public void run() {
+        for (Origin origin : Origin.values())
+            origin.origin.perSecond();
         for (final Player player : plugin.getServer().getOnlinePlayers()) {
-            PlayerData playerData = OriginManager.playersData.get(player.getUniqueId());
-            playerData.origin.origin.perSecond(player, playerData);
+            PlayerData playerData = OriginManager.GetPlayerData(player);
+            playerData.origin.origin.perPlayerPerSecond(player, playerData);
             TickDown(player, playerData);
         }
     }

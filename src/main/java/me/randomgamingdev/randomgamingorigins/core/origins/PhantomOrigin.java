@@ -36,7 +36,7 @@ public class PhantomOrigin extends NullOrigin {
     }
 
     @Override
-    public void perSecond(Player player, PlayerData playerData) {
+    public void perPlayerPerSecond(Player player, PlayerData playerData) {
         if (player.hasPotionEffect(PotionEffectType.INVISIBILITY))
             player.addPotionEffect(new PotionEffect(PotionEffectType.HUNGER, 20, 0, true, false));
     }

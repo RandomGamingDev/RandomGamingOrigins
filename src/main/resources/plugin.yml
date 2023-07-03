@@ -25,5 +25,13 @@ commands:
     usage: /<command> [<string>]
     permission: randomgamingorigins.load
   weeklyorb:
-    usage: /<command> [<player>]
+    usage: /<command>
     permission: randomgamingorigins.weeklyorb
+  getpouch:
+    usage: /<command> [<player>]
+    permission: randomgamingorigins.getpouch
+  setorigin:
+    usage: /<command> [<player>] [<origin id>]
+    permission: randomgamingorigins.setorigin
+  ability:
+    usage: /<command> [<ability>]

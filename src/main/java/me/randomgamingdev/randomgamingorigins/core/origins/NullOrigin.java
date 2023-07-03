@@ -69,6 +69,10 @@ public class NullOrigin {
 
     }
 
+    public void onPlayerDamageByEntityEvent(EntityDamageByEntityEvent event, PlayerData playerData) {
+
+    }
+
     public void onEntityTargetPlayerEvent(EntityTargetEvent event, PlayerData playerData) {
 
     }
@@ -98,18 +102,26 @@ public class NullOrigin {
     }
 
     public void onPlayerDeathEvent(PlayerDeathEvent event, PlayerData playerData) {
-
+        playerData.feared = false;
     }
 
     public void onPlayerRespawnEvent(PlayerRespawnEvent event, PlayerData playerData) {
 
     }
 
-    public void perSecond(Player player, PlayerData playerData) {
+    public void perSecond() {
 
     }
 
-    public void perTick(Player player, PlayerData playerData) {
+    public void perTick() {
+
+    }
+
+    public void perPlayerPerSecond(Player player, PlayerData playerData) {
+
+    }
+
+    public void perPlayerPerTick(Player player, PlayerData playerData) {
 
     }
 }

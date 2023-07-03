@@ -6,7 +6,9 @@ import me.randomgamingdev.randomgamingorigins.core.types.PlayerData;
 import me.randomgamingdev.randomgamingorigins.other.Pair;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.entity.Fireball;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.potion.PotionEffectType;
 
 import static me.randomgamingdev.randomgamingorigins.core.OriginsGui.createGuiItem;
@@ -19,13 +21,26 @@ public class BlazebornOrigin extends NullOrigin {
                             "§r§fBlazeborn",
                             "§7- Fire Immunity: You don't take fire damage",
                             "§7- Burning Wrath: You deal more damage while on fire",
+                            "§7- Fired up: Press your offhand swap key to throw fireballs",
+                            "§7every 15 seconds",
                             "§7- Hydrophobia: You take damage in water as if it were lava");
         this.initEffects = new Object[]{ new Pair(PotionEffectType.FIRE_RESISTANCE, 0) };
         this.maxHealth = 10 * 2;
     }
 
     @Override
-    public void perSecond(Player player, PlayerData playerData) {
+    public void onPlayerSwapHandItemsEvent(PlayerSwapHandItemsEvent event, PlayerData playerData) {
+        Player player = event.getPlayer();
+
+        if (playerData.abilityTimer > 0)
+            return;
+        playerData.abilityTimer = 15;
+        event.setCancelled(true);
+        player.launchProjectile(Fireball.class);
+    }
+
+    @Override
+    public void perPlayerPerSecond(Player player, PlayerData playerData) {
         if (player.getFireTicks() > 0)
             player.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(4);
         else
