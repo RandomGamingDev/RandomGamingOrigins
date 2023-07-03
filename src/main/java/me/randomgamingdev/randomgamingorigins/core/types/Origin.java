@@ -25,7 +25,8 @@ public enum Origin {
     Fox(new FoxOrigin()),
     Merling(new MerlingOrigin()),
     Frog(new FrogOrigin()),
-    Evoker(new EvokerOrigin());
+    Evoker(new EvokerOrigin()),
+    Lunar(new LunarOrigin());
     /*
     Elytrian("Elytrian",
             createGuiItem(Material.ELYTRA, true,
