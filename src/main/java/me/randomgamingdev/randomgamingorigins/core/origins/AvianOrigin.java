@@ -47,6 +47,7 @@ public class AvianOrigin extends NullOrigin {
         if (playerData.abilityTimer > 0)
             return;
         playerData.abilityTimer = 5;
+        event.setCancelled(true);
         Player player = event.getPlayer();
         player.setVelocity(player.getLocation().getDirection().multiply(3));
     }
