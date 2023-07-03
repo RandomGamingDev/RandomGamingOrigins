@@ -202,6 +202,15 @@ public class OriginManager implements Listener {
     @EventHandler
     public void onPlayerInteractEvent(PlayerInteractEvent event) {
         Player player = event.getPlayer();
+        ItemStack item = event.getItem();
+        PlayerInventory inventory = player.getInventory();
+        ItemStack handItem = inventory.getItemInMainHand();
+        if (handItem.getType() == Material.SLIME_BALL && handItem.getItemMeta().getCustomModelData() == originOrbCode) {
+            OriginsGui.Gui(player, true);
+            handItem.setAmount(handItem.getAmount() - 1);
+            return;
+        }
+
         PlayerData playerData = GetPlayerData(player);
         playerData.origin.origin.onPlayerInteractEvent(event, playerData);
     }

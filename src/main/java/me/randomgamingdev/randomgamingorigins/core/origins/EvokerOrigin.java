@@ -45,7 +45,8 @@ public class EvokerOrigin extends NullOrigin {
                         "§7- Magician: You can summon 5 vexes to fight for you at will",
                         "§7every 30 seconds",
                         "§7- Chomp: You can summon a line of 16 fangs in front of you",
-                        "§7to damage other players",
+                        "§7to damage other players by pressing your offhand swap key and",
+                        "§7sneaking",
                         "§7- Old Age: You have 1 less heart than a normal player and",
                         "§7 permanent slowness 1",
                         "§7- Unwieldy: You cannot use shields");
