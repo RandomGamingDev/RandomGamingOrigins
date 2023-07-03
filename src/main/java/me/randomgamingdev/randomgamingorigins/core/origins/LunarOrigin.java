@@ -1,13 +1,10 @@
 package me.randomgamingdev.randomgamingorigins.core.origins;
 
-import me.randomgamingdev.randomgamingorigins.core.OriginManager;
 import me.randomgamingdev.randomgamingorigins.core.types.Origin;
 import me.randomgamingdev.randomgamingorigins.core.types.PlayerData;
-import me.randomgamingdev.randomgamingorigins.other.Pair;
 import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
-import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -34,23 +31,25 @@ public class LunarOrigin extends NullOrigin {
         Server server = getServer();
         long time = server.getWorld("world").getTime();
 
-        if(time > 0 && time < 12542) {
+        if (time > 0 && time < 12542) {
             return true;
         } else {
             return false;
         }
     }
 
-    if(day()) {
+    if day() {
         Player player = event.getPlayer();
 
         player.removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
+        player.removePotionEffect(PotionEffectType.GLOWING);
         player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, Integer.MAX_VALUE, 0, true, false));
-    } else {
+    } else{
         Player player = event.getPlayer();
 
         player.removePotionEffect(PotionEffectType.SLOW);
-        player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, Integer.MAX_VALUE, 0, true, false), (PotionEffectType.GLOWING, Integer.MAX_VALUE, 0, true, false));
+        player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, Integer.MAX_VALUE, 0, true, false));
+        player.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, Integer.MAX_VALUE, 0, true, false));
     }
 
     @Override
@@ -65,5 +64,8 @@ public class LunarOrigin extends NullOrigin {
             player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 1200, 0, true, true));
 
         }
+
+
+    }
 
 }
