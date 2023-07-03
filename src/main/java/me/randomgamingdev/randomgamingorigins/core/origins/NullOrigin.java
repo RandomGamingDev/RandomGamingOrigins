@@ -51,7 +51,7 @@ public class NullOrigin {
     }
 
     public void applyEffects(Player player, PlayerData playerData) {
-        for (Object effectObj : origin.origin.initEffects) {
+        for (Object effectObj : playerData.origin.origin.initEffects) {
             Pair<PotionEffectType, Integer> effect = (Pair<PotionEffectType, Integer>)effectObj;
             player.addPotionEffect(new PotionEffect(effect.first, Integer.MAX_VALUE, effect.second, true, false));
         }
