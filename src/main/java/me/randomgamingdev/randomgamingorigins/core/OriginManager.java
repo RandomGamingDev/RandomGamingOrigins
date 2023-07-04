@@ -113,13 +113,17 @@ public class OriginManager implements Listener {
     @EventHandler
     public void onEntityDamageByEntityEvent(EntityDamageByEntityEvent event) {
         Entity aggressor = event.getDamager();
+        Entity victim = event.getEntity();
+        if (aggressor.getUniqueId() == victim.getUniqueId()) // we're testing for whether the entity's damaging itself here
+            return;
+
+        // both of these assume that it isn't the player attacking themselves
         if (aggressor instanceof Player) {
             Player player = (Player)aggressor;
             PlayerData playerData = GetPlayerData(player);
             playerData.origin.origin.onEntityDamageByPlayerEvent(event, playerData);
         }
 
-        Entity victim = event.getEntity();
         if (victim instanceof Player) {
             Player player = (Player)victim;
             PlayerData playerData = GetPlayerData(player);
