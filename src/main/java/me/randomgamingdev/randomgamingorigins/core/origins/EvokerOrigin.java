@@ -174,8 +174,8 @@ public class EvokerOrigin extends NullOrigin {
             return;
         }
 
+        playerData.abilityTimer = 30;
         for (int i = 0; i < 5; i++) {
-            playerData.abilityTimer = 30;
             Entity vex = player.getWorld().spawnEntity(player.getLocation(), EntityType.VEX);
             PersistentDataContainer persistentDataContainer = vex.getPersistentDataContainer();
             persistentDataContainer.set(new NamespacedKey(OriginManager.plugin, PersistentKey.Summoner.strVal), PersistentDataType.STRING, player.getUniqueId().toString());
