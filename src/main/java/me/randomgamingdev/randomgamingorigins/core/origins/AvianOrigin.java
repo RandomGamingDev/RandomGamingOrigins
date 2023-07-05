@@ -46,7 +46,7 @@ public class AvianOrigin extends NullOrigin {
 
     @Override
     public void onPlayerDamageByEntityEvent(EntityDamageByEntityEvent event, PlayerData playerData) {
-        if (playerData.abilityTimer < 10)
+        if (playerData.abilityTimer <= 5)
             playerData.abilityTimer += 5;
         else
             playerData.abilityTimer = 10;

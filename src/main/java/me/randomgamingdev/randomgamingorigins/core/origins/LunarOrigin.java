@@ -19,38 +19,28 @@ public class LunarOrigin extends NullOrigin {
         this.name = "Lunar";
         this.dispItem = createGuiItem(Material.END_STONE, true,
                 "§r§fLunar",
-                "§7- Crescent Worship: You get Regeneration and Speed 1 by pressing Offhand Swap Key.",
-                "§7- Bloodthirsty: Boosted attack at night",
-                "§7- Bouncing Moonlight: You glow at night",
-                "§7- Blinding Sun: Abilities don't work during the day",
-                "§7- Conquering Sun: Decreased speed during the day");
+                "§7- Crescent Worship: You get 1 minute of",
+                "regeneration and speed 1 by pressing offhand swap ",
+                "key every 2 minutes",
+                "§7- Bloodthirsty: boosted attack at night",
+                "§7- Bouncing Moonlight: you glow at night",
+                "§7- Blinding Sun: your abilities don't work during the day",
+                "§7- Conquering Sun: decreased speed during the day");
         this.maxHealth = 10 * 2;
     }
 
-    public boolean day() {
-        Server server = getServer();
-        long time = server.getWorld("world").getTime();
-
-        if (time > 0 && time < 12542) {
-            return true;
-        } else {
-            return false;
-        }
+    public boolean isDay(Player player) {
+        long time = player.getWorld().getTime();
+        return time > 0 && time < 12300;
     }
+
     @Override
-    public void perSecond(Player player, PlayerData playerData) {
-        if (day()) {
-
-
-            player.removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
-            player.removePotionEffect(PotionEffectType.GLOWING);
-            player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, Integer.MAX_VALUE, 0, true, false));
-        } else{
-
-
-            player.removePotionEffect(PotionEffectType.SLOW);
-            player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, Integer.MAX_VALUE, 0, true, false));
-            player.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, Integer.MAX_VALUE, 0, true, false));
+    public void perPlayerPerSecond(Player player, PlayerData playerData) {
+        if (isDay(player))
+            player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 2 * 20, 0, true, false));
+        else {
+            player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 2 * 20, 0, true, false));
+            player.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 2 * 20, 0, true, false));
         }
     }
 
@@ -58,16 +48,17 @@ public class LunarOrigin extends NullOrigin {
     public void onPlayerSwapHandItemsEvent(PlayerSwapHandItemsEvent event, PlayerData playerData) {
         Player player = event.getPlayer();
 
+        if (playerData.abilityTimer > 0)
+            return;
+        playerData.abilityTimer = 120;
         event.setCancelled(true);
-        if (day()) {
-            player.sendMessage(String.format("Can't use in day time", origin.origin.name));
-        } else {
-            player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 1200, 0, true, true));
-            player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 1200, 0, true, true));
 
+        if (isDay(player))
+            player.sendMessage(String.format("You can't use this ability during the day time", origin.origin.name));
+        else {
+            player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 60 * 20, 0, true, true));
+            player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 60 * 20, 0, true, true));
         }
-
-
     }
 
 }
