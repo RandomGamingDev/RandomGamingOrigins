@@ -127,6 +127,13 @@ public class OriginManager implements Listener {
     }
 
     @EventHandler
+    public void onPlayerTeleportEvent(PlayerTeleportEvent event) {
+        Player player = event.getPlayer();
+        PlayerData playerData = GetPlayerData(player);
+        playerData.origin.origin.onPlayerTeleportEvent(event, playerData);
+    }
+
+    @EventHandler
     public void onPlayerChangedWorldEvent(PlayerChangedWorldEvent event) {
         Player player = event.getPlayer();
         PlayerData playerData = GetPlayerData(player);

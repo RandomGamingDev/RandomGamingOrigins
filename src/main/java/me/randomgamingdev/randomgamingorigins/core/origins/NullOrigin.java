@@ -75,6 +75,10 @@ public class NullOrigin {
 
     }
 
+    public void onPlayerTeleportEvent(PlayerTeleportEvent event, PlayerData playerData) {
+
+    }
+
     public void onEntityDamageByPlayerEvent(EntityDamageByEntityEvent event, PlayerData playerData) {
 
     }
