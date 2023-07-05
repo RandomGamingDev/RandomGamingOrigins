@@ -18,7 +18,8 @@ public class EnderianOrigin extends NullOrigin {
         this.dispItem = createGuiItem(Material.ENDER_PEARL, true,
                         "§r§fEnderian",
                         "§7- Teleportation: Press you offhand swap key to throw a enderpearl",
-                        "§7- Hydrophobia: You take damage in water as if it were lava");
+                              "§7every 15 seconds",
+                              "§7- Hydrophobia: You take damage in water as if it were lava");
         this.initEffects = new Object[]{};
         this.maxHealth = 10 * 2;
     }
@@ -29,13 +30,13 @@ public class EnderianOrigin extends NullOrigin {
 
         if (playerData.abilityTimer > 0)
             return;
-        playerData.abilityTimer = 60;
+        playerData.abilityTimer = 15;
         event.setCancelled(true);
         player.launchProjectile(EnderPearl.class);
     }
 
     @Override
-    public void perSecond(Player player, PlayerData playerData) {
+    public void perPlayerPerSecond(Player player, PlayerData playerData) {
         OriginsSecondCalcTask.WaterDamage(player, playerData, 1);
         OriginsSecondCalcTask.RainDamage(player, playerData, 1);
     }

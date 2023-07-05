@@ -3,6 +3,7 @@ package me.randomgamingdev.randomgamingorigins.core.origins;
 import me.randomgamingdev.randomgamingorigins.core.types.Origin;
 import me.randomgamingdev.randomgamingorigins.core.types.PlayerData;
 import me.randomgamingdev.randomgamingorigins.other.Pair;
+import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.entity.Player;
@@ -10,8 +11,11 @@ import org.bukkit.event.entity.*;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+
+import static me.randomgamingdev.randomgamingorigins.core.OriginManager.elytraCode;
 
 public class NullOrigin {
     public Origin origin = Origin.Null;
@@ -42,7 +46,13 @@ public class NullOrigin {
     }
 
     public void applyCustom(Player player, PlayerData playerData) {
+        PlayerInventory inventory = player.getInventory();
+        ItemStack chestplate = inventory.getChestplate();
 
+        if (chestplate != null &&
+                chestplate.getType().equals(Material.ELYTRA) &&
+                chestplate.getItemMeta().getCustomModelData() == elytraCode)
+            inventory.setChestplate(null);
     }
 
     public void clearEffects(Player player, PlayerData playerData) {
@@ -66,6 +76,10 @@ public class NullOrigin {
     }
 
     public void onEntityDamageByPlayerEvent(EntityDamageByEntityEvent event, PlayerData playerData) {
+
+    }
+
+    public void onPlayerDamageByEntityEvent(EntityDamageByEntityEvent event, PlayerData playerData) {
 
     }
 
@@ -98,18 +112,34 @@ public class NullOrigin {
     }
 
     public void onPlayerDeathEvent(PlayerDeathEvent event, PlayerData playerData) {
-
+        playerData.feared = false;
     }
 
     public void onPlayerRespawnEvent(PlayerRespawnEvent event, PlayerData playerData) {
 
     }
 
-    public void perSecond(Player player, PlayerData playerData) {
+    public void onPlayerChangedWorldEvent(PlayerChangedWorldEvent event, PlayerData playerData) {
 
     }
 
-    public void perTick(Player player, PlayerData playerData) {
+    public void onPlayerBedEnterEvent(PlayerBedEnterEvent event, PlayerData playerDAta) {
+
+    }
+
+    public void perSecond() {
+
+    }
+
+    public void perTick() {
+
+    }
+
+    public void perPlayerPerSecond(Player player, PlayerData playerData) {
+
+    }
+
+    public void perPlayerPerTick(Player player, PlayerData playerData) {
 
     }
 }

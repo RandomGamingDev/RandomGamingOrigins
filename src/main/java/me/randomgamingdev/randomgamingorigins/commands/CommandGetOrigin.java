@@ -8,7 +8,7 @@ import org.bukkit.command.*;
 
 public class CommandGetOrigin implements CommandExecutor {
     public String getOrigin(Player player) {
-        Origin origin = OriginManager.playersData.get(player.getUniqueId()).origin;
+        Origin origin = OriginManager.GetPlayerData(player).origin;
         if (origin == Origin.Null || origin == null)
             return String.format("%s doesn't have an origin!", player.getName());
         return String.format("%s's a(n) %s", player.getName(), origin.origin.name);

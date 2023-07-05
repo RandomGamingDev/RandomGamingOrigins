@@ -7,6 +7,7 @@ import me.randomgamingdev.randomgamingorigins.core.types.PlayerData;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import static me.randomgamingdev.randomgamingorigins.core.OriginManager.GetPlayerData;
 import static me.randomgamingdev.randomgamingorigins.core.OriginManager.playersData;
 
 public class ApplyEffectsTask extends BukkitRunnable {
@@ -22,7 +23,7 @@ public class ApplyEffectsTask extends BukkitRunnable {
 
     @Override
     public void run() {
-        final PlayerData playerData = playersData.get(player.getUniqueId());
+        final PlayerData playerData = GetPlayerData(player);
         playerData.origin.origin.applyEffects(player, playerData);
     }
 }

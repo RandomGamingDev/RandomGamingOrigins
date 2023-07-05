@@ -26,7 +26,7 @@ public class ElytrianOrigin extends NullOrigin {
                         "§r§fElytrian",
                         "§7- Winged: You have a elytra",
                         "§7- Gift of Wings: You can launch yourself by clicking",
-                        "§7your offhand swap key every 60 seconds",
+                        "§7your offhand swap key every 15 seconds",
                         "§7- Arial Combat: While flying you deal more damage",
                         "§7- Need for Mobility: You cant wear chestplates");
         this.initEffects = new Object[]{};
@@ -35,6 +35,7 @@ public class ElytrianOrigin extends NullOrigin {
 
     @Override
     public void applyCustom(Player player, PlayerData playerData) {
+        super.applyCustom(player, playerData);
         PlayerInventory inventory = player.getInventory();
         ItemStack chestplate = inventory.getChestplate();
 
@@ -63,13 +64,13 @@ public class ElytrianOrigin extends NullOrigin {
 
         if (playerData.abilityTimer > 0)
             return;
-        playerData.abilityTimer = 60;
+        playerData.abilityTimer = 15;
         event.setCancelled(true);
         player.setVelocity(player.getVelocity().setY(2));
     }
 
     @Override
-    public void perTick(Player player, PlayerData playerData) {
+    public void perPlayerPerTick(Player player, PlayerData playerData) {
         if (player.isGliding())
             player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 2, 0, true, false));
     }

@@ -15,10 +15,11 @@ public class FelineOrigin extends NullOrigin {
         this.name = "Feline";
         this.dispItem = createGuiItem(Material.ORANGE_WOOL, true,
             "§r§fFeline",
-            "§7- Acrobatics: you take no fall damage",
+            "§7- Acrobatics: You take no fall damage",
+                "§7- SPEEEED: You have speed 5",
             "§7- Strong Ankles: You have jump boost 1",
             "§7- Nine Lives: You have 9 hearts total");
-        this.initEffects = new Object[]{ new Pair(PotionEffectType.JUMP, 0) };
+        this.initEffects = new Object[]{ new Pair(PotionEffectType.JUMP, 0), new Pair(PotionEffectType.SPEED, 4) };
         this.maxHealth = 9 * 2;
 }
 

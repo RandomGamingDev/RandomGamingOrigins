@@ -8,30 +8,21 @@ import org.bukkit.command.*;
 public class CommandOrigins implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (sender instanceof ConsoleCommandSender) {
-            if (args.length == 0)
-                return false;
-            Player target = Bukkit.getPlayer(args[0]);
-            if (target == null)
-                return false;
-            OriginsGui.Gui(target, false);
-            return true;
-        }
-        if (!(sender instanceof Player))
-            return false;
-        Player player = (Player)sender;
+        Player player;
+
         if (args.length == 0) {
-            OriginsGui.Gui(player, false);
-            return true;
+            if (!(sender instanceof Player))
+                return false;
+            player = (Player)sender;
         }
-        Player target = Bukkit.getPlayer(args[0]);
-        if (target == null)
+        else if (sender.hasPermission("randomgamingorigins.originsotherpeoplecommand"))
+            player = Bukkit.getPlayer(args[0]);
+        else
             return false;
-        if (player.hasPermission("randomgamingorigins.originsother")) {
-            player.sendMessage("You don't have permission to use this on other players!");
+
+        if (player == null)
             return false;
-        }
-        OriginsGui.Gui(target, false);
+        OriginsGui.Gui(player, false);
         return true;
     }
 }

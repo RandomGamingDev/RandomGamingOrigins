@@ -29,9 +29,12 @@ public final class RandomGamingOrigins extends JavaPlugin {
         this.getCommand("originssave").setExecutor(new CommandOriginsSave());
         this.getCommand("originsload").setExecutor(new CommandOriginsLoad());
         this.getCommand("weeklyorb").setExecutor(new CommandWeeklyOrb());
+        this.getCommand("getpouch").setExecutor(new CommandGetPouch());
+        this.getCommand("setorigin").setExecutor(new CommandSetOrigin());
+        this.getCommand("ability").setExecutor(new CommandAbility());
         OriginManager.Load(OriginManager.saveFileName);
         for (Player player : this.getServer().getOnlinePlayers())
-            if (OriginManager.playersData.get(player.getUniqueId()) == null)
+            if (OriginManager.GetPlayerData(player) == null)
                 OriginsGui.onJoin(player);
         new OriginsTickCalcTask(this).runTaskTimer(this, 0, 1);
         new OriginsSecondCalcTask(this).runTaskTimer(this, 0, 20);

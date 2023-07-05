@@ -30,7 +30,7 @@ public class FrogOrigin extends NullOrigin {
                         "§7- Small Heart: You have 3 less hearts than a normal player",
                         "§7- Unwieldy: You cannot use shields",
                         "§7- Leap of Faith: Press your offhand swap key to get launched into the air",
-                        "§7which allows you to deal more damage");
+                        "§7every 15 seconds which allows you to deal more damage");
         this.initEffects = new Object[]{
                 new Pair(PotionEffectType.DOLPHINS_GRACE, 0),
                 new Pair(PotionEffectType.WATER_BREATHING, 0),
@@ -47,23 +47,21 @@ public class FrogOrigin extends NullOrigin {
 
     @Override
     public void onPlayerInteractEvent(PlayerInteractEvent event, PlayerData playerData) {
-        final Player player = event.getPlayer();
-        final ItemStack item = event.getItem();
+        Player player = event.getPlayer();
+        ItemStack item = event.getItem();
         if (item == null)
             return;
-        final Material itemType = item.getType();
-
-        final PlayerInventory inventory = player.getInventory();
-        final ItemStack handItem = inventory.getItemInMainHand();
+        Material itemType = item.getType();
+        PlayerInventory inventory = player.getInventory();
+        ItemStack handItem = inventory.getItemInMainHand();
 
         if (!itemType.equals(Material.SHIELD))
             return;
-
-        player.sendMessage(String.format("%s's can't use shields!", origin.origin.name));
+        player.sendMessage(String.format("%s's can't use shields!", this.name));
 
         Location location = player.getLocation();
         World world = player.getWorld();
-        if (handItem.getType().equals(Material.SHIELD))
+        if (handItem != null && handItem.getType().equals(Material.SHIELD))
             inventory.setItemInMainHand(null);
         else
             inventory.setItemInOffHand(null);
@@ -76,7 +74,7 @@ public class FrogOrigin extends NullOrigin {
 
         if (playerData.abilityTimer > 0)
             return;
-        playerData.abilityTimer = 60;
+        playerData.abilityTimer = 15;
         event.setCancelled(true);
         player.setVelocity(player.getVelocity().setY(2));
         player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 4 * 20, 2, true, false));

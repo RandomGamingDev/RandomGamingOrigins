@@ -35,7 +35,7 @@ public class CommandWeeklyOrb implements CommandExecutor { // Add weekly orbs wi
         if (!(sender instanceof Player))
             return false;
         Player player = (Player)sender;
-        PlayerData playerData = OriginManager.playersData.get(player.getUniqueId());
+        PlayerData playerData = OriginManager.GetPlayerData(player);
         long currentTime = System.currentTimeMillis();
         long sinceLastOrb = currentTime - playerData.lastOrb;
         if (sinceLastOrb < Time.week) {

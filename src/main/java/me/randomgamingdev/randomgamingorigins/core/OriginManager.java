@@ -63,8 +63,24 @@ public class OriginManager implements Listener {
             EntityType.PILLAGER,
             EntityType.VEX,
             EntityType.ILLUSIONER,
-            EntityType.RAVAGER
+            EntityType.RAVAGER,
+            EntityType.WITCH
     };
+
+    public static final EntityType[] nonUndeadHerobrineEntities = {
+            EntityType.SPIDER,
+            EntityType.CREEPER,
+    };
+
+    public static boolean IsHerobrineEntity(LivingEntity entity) {
+        if (entity.getCategory().equals(EntityCategory.UNDEAD))
+            return true;
+        for (EntityType nonUndeadHerobrineEntity : nonUndeadHerobrineEntities)
+            if (entity.getType().equals(nonUndeadHerobrineEntity))
+                return true;
+        return false;
+    }
+
     public static final int elytraCode = 1; //4372198
     public static final int originOrbCode = 1; //721398
 
@@ -81,22 +97,68 @@ public class OriginManager implements Listener {
         origin.origin.applyMaxHealth(player, playerData);
     }
 
+    public static PlayerData GetPlayerData(String name) { // Either the username of an online player or UUID
+        final Player possiblePlayer = Bukkit.getPlayer(name);
+        PlayerData playerData;
+        if (possiblePlayer == null) {
+            try {
+                playerData = playersData.get(UUID.fromString(name));
+                if (playerData == null)
+                    return null;
+            }
+            catch (Exception error) {
+                return null;
+            }
+        }
+        else
+            playerData = GetPlayerData(possiblePlayer);
+        return playerData;
+    }
+
+    public static PlayerData GetPlayerData(Player player) {
+        return playersData.get(player.getUniqueId());
+    }
+
     @EventHandler
     public void onPlayerInteractEntityEvent(PlayerInteractEntityEvent event) {
         Player player = event.getPlayer();
-        PlayerData playerData = playersData.get(player.getUniqueId());
+        PlayerData playerData = GetPlayerData(player);
         playerData.origin.origin.onPlayerInteractEntityEvent(event, playerData);
+    }
+
+    @EventHandler
+    public void onPlayerChangedWorldEvent(PlayerChangedWorldEvent event) {
+        Player player = event.getPlayer();
+        PlayerData playerData = GetPlayerData(player);
+        playerData.origin.origin.onPlayerChangedWorldEvent(event, playerData);
+    }
+
+    @EventHandler
+    public void onPlayerBedEnderEvent(PlayerBedEnterEvent event) {
+        Player player = event.getPlayer();
+        PlayerData playerData = GetPlayerData(player);
+        playerData.origin.origin.onPlayerBedEnterEvent(event, playerData);
     }
 
     @EventHandler
     public void onEntityDamageByEntityEvent(EntityDamageByEntityEvent event) {
         Entity aggressor = event.getDamager();
-        if (!(aggressor instanceof Player))
+        Entity victim = event.getEntity();
+        if (aggressor.getUniqueId() == victim.getUniqueId()) // we're testing for whether the entity's damaging itself here
             return;
 
-        Player player = (Player)aggressor;
-        PlayerData playerData = playersData.get(player.getUniqueId());
-        playerData.origin.origin.onEntityDamageByPlayerEvent(event, playerData);
+        // both of these assume that it isn't the player attacking themselves
+        if (aggressor instanceof Player) {
+            Player player = (Player)aggressor;
+            PlayerData playerData = GetPlayerData(player);
+            playerData.origin.origin.onEntityDamageByPlayerEvent(event, playerData);
+        }
+
+        if (victim instanceof Player) {
+            Player player = (Player)victim;
+            PlayerData playerData = GetPlayerData(player);
+            playerData.origin.origin.onPlayerDamageByEntityEvent(event, playerData);
+        }
     }
 
     @EventHandler
@@ -107,7 +169,7 @@ public class OriginManager implements Listener {
             return;
 
         Player player = (Player)target;
-        PlayerData playerData = playersData.get(player.getUniqueId());
+        PlayerData playerData = GetPlayerData(player);
         playerData.origin.origin.onEntityTargetPlayerEvent(event, playerData);
     }
 
@@ -120,7 +182,7 @@ public class OriginManager implements Listener {
             return;
 
         Player player = (Player)entity;
-        PlayerData playerData = playersData.get(player.getUniqueId());
+        PlayerData playerData = GetPlayerData(player);
         playerData.origin.origin.onPlayerResurrectEvent(event, playerData);
         new ApplyEffectsTask(plugin, player, playerData.origin).runTaskLater(plugin, 1);
     }
@@ -131,7 +193,7 @@ public class OriginManager implements Listener {
             return;
 
         Player player = (Player)entity;
-        PlayerData playerData = OriginManager.playersData.get(player.getUniqueId());
+        PlayerData playerData = GetPlayerData(player);
         playerData.origin.origin.onPlayerDamageEvent(event, playerData);
 
         if (playerData.removeDeathCause) {
@@ -145,7 +207,7 @@ public class OriginManager implements Listener {
     @EventHandler
     public void onPlayerDeathEvent(PlayerDeathEvent event) {
         Player player = event.getEntity().getPlayer();
-        PlayerData playerData = playersData.get(player.getUniqueId());
+        PlayerData playerData = GetPlayerData(player);
         playerData.origin.origin.onPlayerDeathEvent(event, playerData);
 
         if (playerData.deathCause == null)
@@ -157,38 +219,55 @@ public class OriginManager implements Listener {
     @EventHandler
     public void onPlayerRespawnEvent(PlayerRespawnEvent event) {
         Player player = event.getPlayer();
-        PlayerData playerData = playersData.get(player.getUniqueId());
+        PlayerData playerData = GetPlayerData(player);
         playerData.origin.origin.onPlayerRespawnEvent(event, playerData);
 
         playerData.origin.origin.applyCustom(player, playerData);
-        new ApplyEffectsTask(plugin, player, playersData.get(player.getUniqueId()).origin).runTaskLater(plugin, 1);
+        new ApplyEffectsTask(plugin, player, GetPlayerData(player).origin).runTaskLater(plugin, 1);
     }
 
     @EventHandler
     public void onPlayerItemDamageEvent(PlayerItemDamageEvent event) {
         Player player = event.getPlayer();
-        PlayerData playerData = playersData.get(player.getUniqueId());
+        PlayerData playerData = GetPlayerData(player);
         playerData.origin.origin.onPlayerItemDamageEvent(event, playerData);
     }
 
     @EventHandler
     public void onPlayerInteractEvent(PlayerInteractEvent event) {
         Player player = event.getPlayer();
-        PlayerData playerData = playersData.get(player.getUniqueId());
+        ItemStack item = event.getItem();
+        PlayerInventory inventory = player.getInventory();
+        ItemStack handItem = inventory.getItemInMainHand();
+        if (handItem.getType() == Material.SLIME_BALL && handItem.getItemMeta().getCustomModelData() == originOrbCode) {
+            OriginsGui.Gui(player, true);
+            handItem.setAmount(handItem.getAmount() - 1);
+            return;
+        }
+
+        PlayerData playerData = GetPlayerData(player);
         playerData.origin.origin.onPlayerInteractEvent(event, playerData);
     }
 
     @EventHandler
     public void onPlayerItemConsumeEvent(PlayerItemConsumeEvent event) {
         Player player = event.getPlayer();
-        PlayerData playerData = playersData.get(player.getUniqueId());
+        PlayerData playerData = GetPlayerData(player);
+        Origin origin = playerData.origin;
+        Material itemType = event.getItem().getType();
+
+        if (itemType.equals(Material.MILK_BUCKET)) {
+            new ApplyEffectsTask(plugin, player, origin).runTaskLater(plugin, 1);
+            return;
+        }
+
         playerData.origin.origin.onPlayerItemConsumeEvent(event, playerData);
     }
 
     @EventHandler
     public void onPlayerSwapHandItemsEvent(PlayerSwapHandItemsEvent event) {
         Player player = event.getPlayer();
-        PlayerData playerData = playersData.get(player.getUniqueId());
+        PlayerData playerData = GetPlayerData(player);
         playerData.origin.origin.onPlayerSwapHandItemsEvent(event, playerData);
     }
 

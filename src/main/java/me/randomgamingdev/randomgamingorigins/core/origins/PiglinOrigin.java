@@ -35,7 +35,7 @@ public class PiglinOrigin extends NullOrigin {
     }
 
     @Override
-    public void perTick(Player player, PlayerData playerData) {
+    public void perPlayerPerTick(Player player, PlayerData playerData) {
         Material item = player.getInventory().getItemInMainHand().getType();
         for (Material tool : OriginManager.goldenTools)
             if (item == tool)
