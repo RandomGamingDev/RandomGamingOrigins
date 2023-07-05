@@ -28,8 +28,8 @@ public enum Origin {
     Evoker(new EvokerOrigin()),
     Starborn(new StarbornOrigin()),
 
-    Healer(new HealerOrigin()),
-    Lunar(new LunarOrigin());
+    Lunar(new LunarOrigin()),
+    Healer(new HealerOrigin());
     //Undead(new UndeadOrigin());
 
     public NullOrigin origin;

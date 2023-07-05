@@ -5,10 +5,10 @@ import me.randomgamingdev.randomgamingorigins.core.OriginManager;
 import me.randomgamingdev.randomgamingorigins.core.types.Origin;
 import me.randomgamingdev.randomgamingorigins.core.types.PlayerData;
 import me.randomgamingdev.randomgamingorigins.other.Pair;
+import org.bukkit.Color;
+import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.entity.LingeringPotion;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.ThrownPotion;
+import org.bukkit.entity.*;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.PotionMeta;
@@ -41,13 +41,12 @@ public class HealerOrigin extends NullOrigin {
             return;
         playerData.abilityTimer = 30;
         event.setCancelled(true);
-        ItemStack potion = new ItemStack(Material.LINGERING_POTION);
-        PotionMeta potionMeta = (PotionMeta) potion.getItemMeta();
 
-        potionMeta.addCustomEffect(new PotionEffect(PotionEffectType.REGENERATION, 400, 0), true);
-        potion.setItemMeta(potionMeta);
-
-        ThrownPotion thrownPotion = player.launchProjectile(LingeringPotion.class);
-        thrownPotion.setItem(potion);
+        Location location = player.getLocation();
+        AreaEffectCloud areaEffectCloud = (AreaEffectCloud)player.getWorld().spawnEntity(location, EntityType.AREA_EFFECT_CLOUD);
+        PotionEffect effect = new PotionEffect(PotionEffectType.REGENERATION, 10 * 20, 0, true, false);
+        areaEffectCloud.addCustomEffect(effect, true);
+        areaEffectCloud.setDuration(10 * 20);
+        areaEffectCloud.setColor(Color.RED);
     }
 }
