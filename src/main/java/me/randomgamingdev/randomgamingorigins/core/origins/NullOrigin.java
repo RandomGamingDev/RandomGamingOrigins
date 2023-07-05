@@ -119,6 +119,14 @@ public class NullOrigin {
 
     }
 
+    public void onPlayerChangedWorldEvent(PlayerChangedWorldEvent event, PlayerData playerData) {
+
+    }
+
+    public void onPlayerBedEnterEvent(PlayerBedEnterEvent event, PlayerData playerDAta) {
+
+    }
+
     public void perSecond() {
 
     }

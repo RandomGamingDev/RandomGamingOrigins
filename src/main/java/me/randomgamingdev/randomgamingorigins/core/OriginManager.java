@@ -65,6 +65,21 @@ public class OriginManager implements Listener {
             EntityType.ILLUSIONER,
             EntityType.RAVAGER
     };
+
+    public static final EntityType[] nonUndeadHerobrineEntities = {
+            EntityType.SPIDER,
+            EntityType.CREEPER,
+    };
+
+    public static boolean IsHerobrineEntity(LivingEntity entity) {
+        if (entity.getCategory().equals(EntityCategory.UNDEAD))
+            return true;
+        for (EntityType nonUndeadHerobrineEntity : nonUndeadHerobrineEntities)
+            if (entity.getType().equals(nonUndeadHerobrineEntity))
+                return true;
+        return false;
+    }
+
     public static final int elytraCode = 1; //4372198
     public static final int originOrbCode = 1; //721398
 
@@ -108,6 +123,20 @@ public class OriginManager implements Listener {
         Player player = event.getPlayer();
         PlayerData playerData = GetPlayerData(player);
         playerData.origin.origin.onPlayerInteractEntityEvent(event, playerData);
+    }
+
+    @EventHandler
+    public void onPlayerChangedWorldEvent(PlayerChangedWorldEvent event) {
+        Player player = event.getPlayer();
+        PlayerData playerData = GetPlayerData(player);
+        playerData.origin.origin.onPlayerChangedWorldEvent(event, playerData);
+    }
+
+    @EventHandler
+    public void onPlayerBedEnderEvent(PlayerBedEnterEvent event) {
+        Player player = event.getPlayer();
+        PlayerData playerData = GetPlayerData(player);
+        playerData.origin.origin.onPlayerBedEnterEvent(event, playerData);
     }
 
     @EventHandler

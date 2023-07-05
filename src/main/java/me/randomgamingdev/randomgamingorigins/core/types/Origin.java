@@ -25,7 +25,9 @@ public enum Origin {
     Fox(new FoxOrigin()),
     Merling(new MerlingOrigin()),
     Frog(new FrogOrigin()),
-    Evoker(new EvokerOrigin());
+    Evoker(new EvokerOrigin()),
+    Starborn(new StarbornOrigin());
+    //Undead(new UndeadOrigin());
 
     public NullOrigin origin;
 
