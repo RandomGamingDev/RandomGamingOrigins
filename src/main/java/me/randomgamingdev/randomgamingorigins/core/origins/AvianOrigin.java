@@ -6,6 +6,7 @@ import me.randomgamingdev.randomgamingorigins.core.types.PlayerData;
 import me.randomgamingdev.randomgamingorigins.other.Pair;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
@@ -40,6 +41,11 @@ public class AvianOrigin extends NullOrigin {
             event.setCancelled(true);
             break;
         }
+    }
+
+    @Override
+    public void onPlayerDamageByEntityEvent(EntityDamageByEntityEvent event, PlayerData playerData) {
+        playerData.abilityTimer += 5;
     }
 
     @Override
