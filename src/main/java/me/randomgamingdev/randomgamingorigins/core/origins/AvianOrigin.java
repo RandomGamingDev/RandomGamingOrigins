@@ -24,6 +24,7 @@ public class AvianOrigin extends NullOrigin {
                         "§7- Featherweight: You have feather falling 1",
                         "§7- Flight: You can boost yourself in the direction",
                         "§7you're looking every 5 seconds",
+                        "§7- Frail: It takes ",
                         "§7- Vegetarian: You can't eat meat");
         this.initEffects = new Object[]{ new Pair(PotionEffectType.SPEED, 0), new Pair(PotionEffectType.SLOW_FALLING, 0) };
         this.maxHealth = 10 * 2;
@@ -45,7 +46,10 @@ public class AvianOrigin extends NullOrigin {
 
     @Override
     public void onPlayerDamageByEntityEvent(EntityDamageByEntityEvent event, PlayerData playerData) {
-        playerData.abilityTimer += 5;
+        if (playerData.abilityTimer < 10)
+            playerData.abilityTimer += 5;
+        else
+            playerData.abilityTimer = 10;
     }
 
     @Override
