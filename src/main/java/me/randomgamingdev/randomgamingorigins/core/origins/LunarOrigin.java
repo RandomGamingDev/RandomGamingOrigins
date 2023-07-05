@@ -20,8 +20,8 @@ public class LunarOrigin extends NullOrigin {
         this.dispItem = createGuiItem(Material.END_STONE, true,
                 "§r§fLunar",
                 "§7- Crescent Worship: You get 1 minute of",
-                "regeneration and speed 1 by pressing offhand swap ",
-                "key every 2 minutes",
+                "§7regeneration and speed 1 by pressing offhand swap ",
+                "§7key every 2 minutes",
                 "§7- Bloodthirsty: boosted attack at night",
                 "§7- Bouncing Moonlight: you glow at night",
                 "§7- Blinding Sun: your abilities don't work during the day",
@@ -50,12 +50,12 @@ public class LunarOrigin extends NullOrigin {
 
         if (playerData.abilityTimer > 0)
             return;
-        playerData.abilityTimer = 120;
         event.setCancelled(true);
 
         if (isDay(player))
-            player.sendMessage(String.format("You can't use this ability during the day time", origin.origin.name));
+            player.sendMessage("You can't use this ability during the day time");
         else {
+            playerData.abilityTimer = 120;
             player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 60 * 20, 0, true, true));
             player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 60 * 20, 0, true, true));
         }
