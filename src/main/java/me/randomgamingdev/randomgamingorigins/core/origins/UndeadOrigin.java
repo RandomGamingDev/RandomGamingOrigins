@@ -17,7 +17,7 @@ import static me.randomgamingdev.randomgamingorigins.core.OriginsGui.createGuiIt
 
 public class UndeadOrigin extends NullOrigin {
     public UndeadOrigin() {
-        this.origin = Origin.Undead;
+        //this.origin = Origin.Undead;
         this.name = "Undead";
         this.dispItem = createGuiItem(Material.ROTTEN_FLESH, true,
             "§r§Undead",

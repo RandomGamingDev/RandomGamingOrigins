@@ -35,6 +35,7 @@ public class ElytrianOrigin extends NullOrigin {
 
     @Override
     public void applyCustom(Player player, PlayerData playerData) {
+        super.applyCustom(player, playerData);
         PlayerInventory inventory = player.getInventory();
         ItemStack chestplate = inventory.getChestplate();
 

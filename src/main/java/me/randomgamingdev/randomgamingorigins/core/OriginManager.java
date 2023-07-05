@@ -63,7 +63,8 @@ public class OriginManager implements Listener {
             EntityType.PILLAGER,
             EntityType.VEX,
             EntityType.ILLUSIONER,
-            EntityType.RAVAGER
+            EntityType.RAVAGER,
+            EntityType.WITCH
     };
 
     public static final EntityType[] nonUndeadHerobrineEntities = {
