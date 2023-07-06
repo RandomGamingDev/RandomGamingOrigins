@@ -87,10 +87,15 @@ public class EvokerOrigin extends NullOrigin {
         if (playerData.feared)
             return;
 
+        Entity targetEntity = event.getEntity();
+
+        if (!(targetEntity instanceof LivingEntity))
+            return;
+
         for (Entity entity : ((Player)event.getDamager()).getNearbyEntities(32, 32, 32))
             for (EntityType illager : illagers)
                 if (entity.getType().equals(illager))
-                    ((Mob)entity).setTarget((LivingEntity)event.getEntity());
+                    ((Mob)entity).setTarget((LivingEntity)targetEntity);
     }
 
     @Override
