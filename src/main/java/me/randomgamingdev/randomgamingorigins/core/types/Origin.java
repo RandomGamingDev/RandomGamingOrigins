@@ -27,7 +27,6 @@ public enum Origin {
     Frog(new FrogOrigin()),
     Evoker(new EvokerOrigin()),
     Starborn(new StarbornOrigin()),
-
     Lunar(new LunarOrigin()),
     Healer(new HealerOrigin()),
     Serpent(new SerpentOrigin());

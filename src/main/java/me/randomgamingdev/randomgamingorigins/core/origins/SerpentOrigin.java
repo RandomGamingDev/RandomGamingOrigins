@@ -34,8 +34,8 @@ public class SerpentOrigin extends NullOrigin {
         Player player = event.getPlayer();
         Material itemType = event.getItem().getType();
 
-        for (Material nonmeat : OriginManager.nonmeat) {
-            if (itemType != nonmeat)
+        for (Material meat : OriginManager.meats) {
+            if (itemType == meat)
                 continue;
             player.sendMessage(String.format("%s's can only eat meat!", this.name));
             event.setCancelled(true);
@@ -50,20 +50,17 @@ public class SerpentOrigin extends NullOrigin {
             return;
         playerData.abilityTimer = 60;
         event.setCancelled(true);
+
         Player player = event.getPlayer();
         player.setVelocity(player.getLocation().getDirection().multiply(2));
         player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_FALLING, 80, 0, true, false));
     }
 
     public void onEntityDamageByPlayerEvent(EntityDamageByEntityEvent event, PlayerData playerData) {
-        if(event.getEntity() instanceof Player)
-        {
-            Player player = (Player)event.getEntity();
-            // event.getCause().ENTITY_ATTACK?
-            player.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 80, 0));
+        if (!(event.getEntity() instanceof Player))
+            return;
 
-        }
-
-
+        Player player = (Player)event.getEntity();
+        player.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 80, 0));
     }
 }

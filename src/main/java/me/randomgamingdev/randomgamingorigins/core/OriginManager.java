@@ -49,19 +49,6 @@ public class OriginManager implements Listener {
             Material.ROTTEN_FLESH
     };
 
-    public static final Material[] nonmeat = {
-            Material.APPLE, Material.GOLDEN_APPLE,
-            Material.CARROT, Material.GOLDEN_CARROT,
-            Material.MELON_SLICE, Material.SWEET_BERRIES,
-            Material.GLOW_BERRIES, Material.CHORUS_FRUIT,
-            Material.POTATO, Material.BAKED_POTATO,
-            Material.POISONOUS_POTATO, Material.BEETROOT,
-            Material.DRIED_KELP, Material.BREAD,
-            Material.COOKIE,
-            Material.PUMPKIN_PIE,
-            Material.MUSHROOM_STEM, Material.BEETROOT_SOUP
-    };
-
     public static final Material[] goldenTools = {
             Material.GOLDEN_SWORD,
             Material.GOLDEN_AXE,
