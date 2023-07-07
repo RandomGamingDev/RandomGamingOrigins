@@ -36,7 +36,7 @@ public class SerpentOrigin extends NullOrigin {
 
         for (Material meat : OriginManager.meats) {
             if (itemType == meat)
-                continue;
+                break;
             player.sendMessage(String.format("%s's can only eat meat!", this.name));
             event.setCancelled(true);
             break;
