@@ -9,7 +9,7 @@ If the plugin isn't working on your version trying changing the api-version in p
 
 This plugin relies purely on the spigot API and thus should easily work on multiple Minecraft versions
 
-Wanna try out this plugin for yourself? Try it out at Minting.minehut.gg!
+Wanna try out this plugin for yourself? Try it out at Minting.minehut.gg (Sadly, the server's been shut down)!
 
 To see all the commands check them out at https://github.com/RandomGamingDev/RandomGamingOrigins/blob/main/src/main/resources/plugin.yml!
 
