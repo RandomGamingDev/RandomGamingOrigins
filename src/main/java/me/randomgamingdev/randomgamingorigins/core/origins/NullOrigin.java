@@ -7,6 +7,8 @@ import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.entity.Player;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockDropItemEvent;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.Inventory;
@@ -128,6 +130,14 @@ public class NullOrigin {
     }
 
     public void onPlayerBedEnterEvent(PlayerBedEnterEvent event, PlayerData playerDAta) {
+
+    }
+
+    public void onPlayerBrokenBlockDropItemEvent(BlockDropItemEvent event, PlayerData playerData) {
+
+    }
+
+    public void onPlayerBreakBlockEvent(BlockBreakEvent event, PlayerData playerData) {
 
     }
 

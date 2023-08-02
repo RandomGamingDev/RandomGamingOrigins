@@ -5,22 +5,18 @@ import me.randomgamingdev.randomgamingorigins.core.tasks.ApplyEffectsTask;
 import me.randomgamingdev.randomgamingorigins.core.types.Origin;
 import me.randomgamingdev.randomgamingorigins.other.Pair;
 import me.randomgamingdev.randomgamingorigins.core.types.PlayerData;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockDropItemEvent;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.player.*;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemFlag;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -30,6 +26,8 @@ import org.yaml.snakeyaml.external.biz.base64Coder.Base64Coder;
 
 import java.io.*;
 import java.util.*;
+
+import static me.randomgamingdev.randomgamingorigins.commands.CommandWeeklyOrb.orb;
 
 public class OriginManager implements Listener {
     public static RandomGamingOrigins plugin;
@@ -57,6 +55,13 @@ public class OriginManager implements Listener {
             Material.GOLDEN_HOE
     };
 
+    public static final Material[] goldenArmors = {
+            Material.GOLDEN_HELMET,
+            Material.GOLDEN_CHESTPLATE,
+            Material.GOLDEN_LEGGINGS,
+            Material.GOLDEN_BOOTS
+    };
+
     public static final EntityType[] illagers = {
             EntityType.EVOKER,
             EntityType.VINDICATOR,
@@ -82,7 +87,7 @@ public class OriginManager implements Listener {
     }
 
     public static final int elytraCode = 1; //4372198
-    public static final int originOrbCode = 1; //721398
+    public static final int originOrbCode = 721398;
 
     public static void ApplyOrigin(Player player, PlayerData playerData) {
         Origin origin = playerData.origin;
@@ -124,6 +129,24 @@ public class OriginManager implements Listener {
         Player player = event.getPlayer();
         PlayerData playerData = GetPlayerData(player);
         playerData.origin.origin.onPlayerInteractEntityEvent(event, playerData);
+    }
+
+    @EventHandler
+    public void onBlockDropItemEvent(BlockDropItemEvent event) {
+        Player player = event.getPlayer();
+        if (player == null)
+            return;
+        PlayerData playerData = GetPlayerData(player);
+        playerData.origin.origin.onPlayerBrokenBlockDropItemEvent(event, playerData);
+    }
+
+    @EventHandler
+    public void onBlockBreakEvent(BlockBreakEvent event) {
+        Player player = event.getPlayer();
+        if (player == null)
+            return;
+        PlayerData playerData = GetPlayerData(player);
+        playerData.origin.origin.onPlayerBreakBlockEvent(event, playerData);
     }
 
     @EventHandler
@@ -246,7 +269,11 @@ public class OriginManager implements Listener {
         ItemStack item = event.getItem();
         PlayerInventory inventory = player.getInventory();
         ItemStack handItem = inventory.getItemInMainHand();
-        if (handItem.getType() == Material.SLIME_BALL && handItem.getItemMeta().getCustomModelData() == originOrbCode) {
+        ItemMeta handMeta = handItem.getItemMeta();
+
+        if (handItem.getType() == Material.SLIME_BALL &&
+                handMeta.hasCustomModelData() && handMeta.getCustomModelData() == originOrbCode ||
+                handMeta.hasCustomModelData() && handMeta.getCustomModelData() == 1) {
             OriginsGui.Gui(player, true);
             handItem.setAmount(handItem.getAmount() - 1);
             return;

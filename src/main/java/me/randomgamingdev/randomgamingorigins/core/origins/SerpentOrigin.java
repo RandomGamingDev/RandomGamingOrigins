@@ -5,6 +5,7 @@ import me.randomgamingdev.randomgamingorigins.core.types.Origin;
 import me.randomgamingdev.randomgamingorigins.core.types.PlayerData;
 import me.randomgamingdev.randomgamingorigins.other.Pair;
 import org.bukkit.Material;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
@@ -20,11 +21,12 @@ public class SerpentOrigin extends NullOrigin {
         this.name = "Serpent";
         this.dispItem = createGuiItem(Material.POINTED_DRIPSTONE, true,
                 "§r§fSerpent",
-                "§7- Poisonous Bite: Attacking other players causes poison damage",
-                "§7- Fangs: Have extra attack damage",
-                "§7- Swift Slithering: Slightly Faster",
+                "§7- Poisonous Bite: Attacking other players causes has a 25%",
+                "§7chance of inflicting poison damage that lasts for 4 seconds",
+                "§7- Swift Slithering: You have speed 1",
+                "§7- Fangs: You have strength 1",
                 "§7- Carnivorous: Can only eat meat",
-                "§7- Weak Creature: Has 1 less heart");
+                "§7- Weak Creature: You have 9 hearts");
         this.initEffects = new Object[]{new Pair(PotionEffectType.SPEED, 0), new Pair(PotionEffectType.INCREASE_DAMAGE, 0)};
         this.maxHealth = 9 * 2;
     }
@@ -41,24 +43,13 @@ public class SerpentOrigin extends NullOrigin {
         event.setCancelled(true);
     }
 
-
-    @Override
-    public void onPlayerSwapHandItemsEvent(PlayerSwapHandItemsEvent event, PlayerData playerData) {
-        if (playerData.abilityTimer > 0)
-            return;
-        playerData.abilityTimer = 60;
-        event.setCancelled(true);
-
-        Player player = event.getPlayer();
-        player.setVelocity(player.getLocation().getDirection().multiply(2));
-        player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_FALLING, 80, 0, true, false));
-    }
-
     public void onEntityDamageByPlayerEvent(EntityDamageByEntityEvent event, PlayerData playerData) {
-        if (!(event.getEntity() instanceof Player))
+        Entity entity = event.getEntity();
+        if (!(entity instanceof Player))
             return;
 
-        Player player = (Player)event.getEntity();
-        player.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 80, 0));
+        Player player = (Player)entity;
+        if (Math.floor(Math.random() * 4) == 0)
+            player.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 4 * 20, 0));
     }
 }

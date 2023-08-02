@@ -22,9 +22,9 @@ public class LunarOrigin extends NullOrigin {
                 "§7- Crescent Worship: You get 1 minute of",
                 "§7regeneration and speed 1 by pressing offhand swap ",
                 "§7key every 2 minutes",
-                "§7- Bloodthirsty: boosted attack at night",
-                "§7- Bouncing Moonlight: you glow at night",
-                "§7- Blinding Sun: your abilities don't work during the day",
+                "§7- Bloodthirsty: Boosted attack at night",
+                "§7- Bouncing Moonlight: You have strength 2 and glow at night",
+                "§7- Blinding Sun: Your abilities don't work during the day",
                 "§7- Conquering Sun: decreased speed during the day");
         this.maxHealth = 10 * 2;
     }
@@ -39,7 +39,7 @@ public class LunarOrigin extends NullOrigin {
         if (isDay(player))
             player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 2 * 20, 0, true, false));
         else {
-            player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 2 * 20, 0, true, false));
+            player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 2 * 20, 1, true, false));
             player.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 2 * 20, 0, true, false));
         }
     }

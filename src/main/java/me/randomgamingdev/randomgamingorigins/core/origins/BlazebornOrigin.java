@@ -20,7 +20,8 @@ public class BlazebornOrigin extends NullOrigin {
         this.dispItem = createGuiItem(Material.BLAZE_POWDER, true,
                             "§r§fBlazeborn",
                             "§7- Fire Immunity: You don't take fire damage",
-                            "§7- Burning Wrath: You deal more damage while on fire",
+                            "§7- Burning Wrath: You deal more damage while on fire ",
+                            "§(this can be combined with strength)",
                             "§7- Fired up: Press your offhand swap key to throw fireballs",
                             "§7every 15 seconds",
                             "§7- Hydrophobia: You take damage in water as if it were lava");

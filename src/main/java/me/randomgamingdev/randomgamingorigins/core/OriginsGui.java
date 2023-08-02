@@ -94,6 +94,8 @@ public class OriginsGui implements Listener {
         PlayerData playerData = OriginManager.playersData.get(playerId);
         if (playerData.origin != Origin.Null)
             return;
+        if (!player.hasPermission(String.format("randomgamingorigins.origin.%s", origin.origin.name)))
+            return;
         OriginManager.playersData.get(playerId).origin = origin;
         player.closeInventory();
         Bukkit.getServer().getScheduler().runTaskLater(plugin, player::updateInventory, 1L);

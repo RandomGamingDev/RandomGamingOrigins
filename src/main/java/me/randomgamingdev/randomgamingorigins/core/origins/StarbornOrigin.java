@@ -106,5 +106,6 @@ public class StarbornOrigin extends NullOrigin {
         playerData.abilityTimer = 15;
         location.add(direction.multiply(20));
         player.teleport(location);
+        player.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 15 * 20, 0, true, true));
     }
 }

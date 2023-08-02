@@ -25,11 +25,11 @@ public class HealerOrigin extends NullOrigin {
         this.name = "Healer";
         this.dispItem = createGuiItem(Material.LINGERING_POTION, true,
                 "§r§fHealer",
-                "§7- Heal: Spawn in Regeneration effect cloud using offhand key",
+                "§7- Heal: Spawn in a regeneration 3 effect cloud using offhand key",
                 "§7- Untrained: You have permanent weakness",
                 "§7- Medic: Lack of battle training has caused you to only have 8 max hearts");
         this.initEffects = new Object[]{new Pair(PotionEffectType.WEAKNESS, 0) };
-        this.maxHealth = 8 * 2;
+        this.maxHealth = 9 * 2;
     }
 
 
@@ -44,7 +44,7 @@ public class HealerOrigin extends NullOrigin {
 
         Location location = player.getLocation();
         AreaEffectCloud areaEffectCloud = (AreaEffectCloud)player.getWorld().spawnEntity(location, EntityType.AREA_EFFECT_CLOUD);
-        PotionEffect effect = new PotionEffect(PotionEffectType.REGENERATION, 10 * 20, 0, true, false);
+        PotionEffect effect = new PotionEffect(PotionEffectType.REGENERATION, 10 * 20, 2, true, false);
         areaEffectCloud.addCustomEffect(effect, true);
         areaEffectCloud.setDuration(10 * 20);
         areaEffectCloud.setColor(Color.RED);
