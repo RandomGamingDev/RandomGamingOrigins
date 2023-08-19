@@ -267,16 +267,15 @@ public class OriginManager implements Listener {
     public void onPlayerInteractEvent(PlayerInteractEvent event) {
         Player player = event.getPlayer();
         ItemStack item = event.getItem();
-        PlayerInventory inventory = player.getInventory();
-        ItemStack handItem = inventory.getItemInMainHand();
-        ItemMeta handMeta = handItem.getItemMeta();
 
-        if (handItem.getType() == Material.SLIME_BALL &&
-                handMeta.hasCustomModelData() && handMeta.getCustomModelData() == originOrbCode ||
-                handMeta.hasCustomModelData() && handMeta.getCustomModelData() == 1) {
-            OriginsGui.Gui(player, true);
-            handItem.setAmount(handItem.getAmount() - 1);
-            return;
+        if (item != null) {
+            ItemMeta meta = item.getItemMeta();
+            if (meta != null && item.getType() == Material.SLIME_BALL &&
+                meta.hasCustomModelData() && meta.getCustomModelData() == originOrbCode ||
+                meta.hasCustomModelData() && meta.getCustomModelData() == 1) {
+                OriginsGui.Gui(player, true);
+                item.setAmount(item.getAmount() - 1);
+            }
         }
 
         PlayerData playerData = GetPlayerData(player);
@@ -387,31 +386,31 @@ public class OriginManager implements Listener {
                         playerData.origin.origin.applyInv(Bukkit.getPlayer(playerId), playerData);
                         break;
                     case "OriInv: ":
-                        if (data.equals("null")) {
-                            OriginManager.playersData.put(playerId, playerData);
+                        UUID toStorePlayerId = playerId;
+
+                        if (!data.equals("null")) {
+                            StringBuilder invStr = new StringBuilder();
+
+                            while (myReader.hasNextLine()) {
+                                line = myReader.nextLine();
+                                if (line.length() >= 7 && line.charAt(6) == ':')
+                                    break;
+                                invStr.append(line + '\n');
+                            }
+                            try {
+                                playerData.pouch = InvDeserialize(invStr.toString());
+                            } catch (Exception e) {
+                                System.out.println(String.format("RandomGamingOrigins: Failed to load the inventory of %s",
+                                        playerId.toString()));
+                            }
+
+                            if (myReader.hasNextLine())
+                                playerId = UUID.fromString(line.substring(8));
+                        }
+                        else
                             playerId = null;
-                            playerData = new PlayerData();
-                            break;
-                        }
 
-                        StringBuilder invStr = new StringBuilder();
-
-                        while (myReader.hasNextLine()) {
-                            line = myReader.nextLine();
-                            if (line.length() >= 7 && line.charAt(6) == ':')
-                                break;
-                            invStr.append(line + '\n');
-                        }
-                        try {
-                            playerData.pouch = InvDeserialize(invStr.toString());
-                        }
-                        catch (Exception e) {
-                            System.out.println(String.format("RandomGamingOrigins: Failed to load the inventory of %s",
-                                    playerId.toString()));
-                        }
-
-                        OriginManager.playersData.put(playerId, playerData);
-                        playerId = null;
+                        OriginManager.playersData.put(toStorePlayerId, playerData);
                         playerData = new PlayerData();
                         break;
                 }

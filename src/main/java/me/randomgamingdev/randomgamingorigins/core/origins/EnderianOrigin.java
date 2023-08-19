@@ -29,7 +29,8 @@ public class EnderianOrigin extends NullOrigin {
                         "§7- Teleportation: Press you offhand swap key to throw a enderpearl",
                               "§7every 15 seconds",
                               "§7- Silk touch: You can mine blocks that otherwise wouldn't",
-                              "§7have dropped anything, like for instance spawners",
+                              "§7have dropped anything, like for instance spawners if mined",
+                              "§7with just your hands",
                               "§7- Resistance: You don't take damage from using enderpearls",
                               "§7- Hydrophobia: You take damage in water as if it were lava");
         this.initEffects = new Object[]{};
