@@ -72,6 +72,11 @@ public class OriginManager implements Listener {
             EntityType.WITCH
     };
 
+    public static final EntityType[] piglins = {
+        EntityType.PIGLIN,
+        EntityType.PIGLIN_BRUTE
+    };
+
     public static final EntityType[] nonUndeadHerobrineEntities = {
             EntityType.SPIDER,
             EntityType.CREEPER,

@@ -3,18 +3,27 @@ package me.randomgamingdev.randomgamingorigins.core.origins;
 import me.randomgamingdev.randomgamingorigins.RandomGamingOrigins;
 import me.randomgamingdev.randomgamingorigins.core.OriginManager;
 import me.randomgamingdev.randomgamingorigins.core.types.Origin;
+import me.randomgamingdev.randomgamingorigins.core.types.PersistentKey;
 import me.randomgamingdev.randomgamingorigins.core.types.PlayerData;
+import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
+import org.bukkit.NamespacedKey;
+import org.bukkit.World;
+import org.bukkit.entity.*;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.player.PlayerItemDamageEvent;
+import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import static me.randomgamingdev.randomgamingorigins.core.OriginManager.goldenTools;
+import java.util.UUID;
+
+import static me.randomgamingdev.randomgamingorigins.core.OriginManager.*;
 import static me.randomgamingdev.randomgamingorigins.core.OriginsGui.createGuiItem;
 
 public class PiglinOrigin extends NullOrigin {
@@ -28,7 +37,9 @@ public class PiglinOrigin extends NullOrigin {
                         "§7- Praise the Gods: Piglins have a natural connection",
                         "§7to their god and can use it to trade the gold in their hand",
                         "§7- Golden tools break WAY slower",
-                        "§7- Gold armor better protects you and from all forms",
+                        "§7Gold armor better protects you and from all forms",
+                        "§7- Ally: As a piglin you're automatically allied with them",
+                        "§7unless you hurt one of them",
                         "§of damage with a full armor set giving 20% reduction");
         this.initEffects = new Object[]{};
         this.maxHealth = 8 * 2;
@@ -50,6 +61,27 @@ public class PiglinOrigin extends NullOrigin {
         for (Material tool : OriginManager.goldenTools)
             if (item == tool)
                 event.setDamage(event.getDamage() * 1.5);
+
+        EntityType victimType = victim.getType();
+
+        for (EntityType piglin : piglins)
+            if (victimType.equals(piglin)) {
+                playerData.feared = true;
+                return;
+            }
+
+        if (playerData.feared)
+            return;
+
+        Entity targetEntity = event.getEntity();
+
+        if (!(targetEntity instanceof LivingEntity))
+            return;
+
+        for (Entity entity : ((Player)event.getDamager()).getNearbyEntities(32, 32, 32))
+            for (EntityType piglin : piglins)
+                if (entity.getType().equals(piglin))
+                    ((Mob)entity).setTarget((LivingEntity)targetEntity);
     }
 
     @Override
@@ -76,5 +108,55 @@ public class PiglinOrigin extends NullOrigin {
 
         double gArmorPerc = (1.0 - 0.2 * ((double)armorVal / (double)maxArmorVal));
         event.setDamage(event.getDamage() * gArmorPerc);
+
+        if (playerData.feared)
+            return;
+        for (Entity entity : ((Player)event.getEntity()).getNearbyEntities(32, 32, 32))
+            for (EntityType piglin : piglins)
+                if (entity.getType().equals(piglin))
+                    ((Mob)entity).setTarget((LivingEntity)event.getDamager());
+    }
+
+    @Override
+    public void onEntityTargetPlayerEvent(EntityTargetEvent event, PlayerData playerData) {
+        Entity entity = event.getEntity();
+        EntityType entityType = event.getEntityType();
+
+        if (playerData.feared)
+            return;
+
+        for (EntityType piglin : piglins)
+            if (entityType.equals(piglin)) {
+                event.setCancelled(true);
+                break;
+            }
+    }
+
+    @Override
+    public void onPlayerSwapHandItemsEvent(PlayerSwapHandItemsEvent event, PlayerData playerData) {
+        Player player = event.getPlayer();
+        PlayerInventory playerInventory = player.getInventory();
+        ItemStack handItem = playerInventory.getItemInMainHand();
+
+        if (handItem.getType() != Material.GOLD_INGOT)
+            return;
+
+        handItem.setAmount(handItem.getAmount() - 1);
+        playerInventory.setItemInMainHand(handItem);
+
+
+        Material drop = new Material[]{
+                Material.OBSIDIAN,
+                Material.QUARTZ,
+                Material.GOLDEN_APPLE,
+                Material.PIGLIN_BANNER_PATTERN,
+                Material.GILDED_BLACKSTONE,
+                Material.PORKCHOP
+        }[(int)Math.floor(Math.random() * 7)];
+
+        World world = player.getWorld();
+        Location location = player.getLocation();
+
+        world.dropItem(location, new ItemStack(drop, (int)Math.floor(Math.random() * 5)));
     }
 }
