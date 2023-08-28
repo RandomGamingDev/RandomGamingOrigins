@@ -40,7 +40,7 @@ public class PiglinOrigin extends NullOrigin {
                         "§7Gold armor better protects you and from all forms",
                         "§7- Ally: As a piglin you're automatically allied with them",
                         "§7unless you hurt one of them",
-                        "§of damage with a full armor set giving 20% reduction");
+                        "§7of damage with a full armor set giving 20% reduction");
         this.initEffects = new Object[]{};
         this.maxHealth = 8 * 2;
     }
@@ -134,9 +134,13 @@ public class PiglinOrigin extends NullOrigin {
 
     @Override
     public void onPlayerSwapHandItemsEvent(PlayerSwapHandItemsEvent event, PlayerData playerData) {
+        event.setCancelled(true);
+
         Player player = event.getPlayer();
         PlayerInventory playerInventory = player.getInventory();
         ItemStack handItem = playerInventory.getItemInMainHand();
+        if (handItem == null)
+            return;
 
         if (handItem.getType() != Material.GOLD_INGOT)
             return;
