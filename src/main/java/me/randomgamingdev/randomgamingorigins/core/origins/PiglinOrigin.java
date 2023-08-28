@@ -148,7 +148,6 @@ public class PiglinOrigin extends NullOrigin {
         handItem.setAmount(handItem.getAmount() - 1);
         playerInventory.setItemInMainHand(handItem);
 
-
         Material drop = new Material[]{
                 Material.OBSIDIAN,
                 Material.QUARTZ,
@@ -156,11 +155,14 @@ public class PiglinOrigin extends NullOrigin {
                 Material.PIGLIN_BANNER_PATTERN,
                 Material.GILDED_BLACKSTONE,
                 Material.PORKCHOP
-        }[(int)Math.floor(Math.random() * 7)];
+        }[(int)Math.floor(Math.random() * 5)];
 
         World world = player.getWorld();
         Location location = player.getLocation();
 
-        world.dropItem(location, new ItemStack(drop, (int)Math.floor(Math.random() * 5)));
+        int amount = 1;
+        if (drop != Material.PIGLIN_BANNER_PATTERN)
+            amount = (int)Math.floor(Math.random() * 4) + 1;
+        world.dropItem(location, new ItemStack(drop, amount));
     }
 }
