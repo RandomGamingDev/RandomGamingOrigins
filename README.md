@@ -3,7 +3,11 @@ A basic Origins plugin that's heavily inspired and improves on the original orig
 
 This plugin has been tested with:
 Spigot 1.18 (Should work with multiple versions older and newer than this)
+
 Spigot 1.19.3
+
+The permissions for the commands are in [plugin.yml](https://github.com/RandomGamingDev/RandomGamingOrigins/blob/main/src/main/resources/plugin.yml) <br/>
+The permissions for the origins are randomgamingorigins.origin.<name_of_origin_in_lowercase> (you can just use randomgamingorigins.origin.* if you want to enable all of them)
 
 If the plugin isn't working on your version trying changing the api-version in plugin.yml!
 
